@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="#cocos-2dx游戏开发日记 ###1.分辨率： 本人的手机是小米8，分辨率为2248 * 1048，所以将cocos的分辨率调到合适的大小  cocos项目建完后，找到项目工程下的win32文件夹的main.cpp，这个文件是游戏程序的入口,用于创建cocos2dx的AppDelegate实例、窗口大小、以及运行程序。  接着找到项目工程下的src文件夹，展开后打开AppDelegate.c">
+<meta name="description" content="cocos-2dx游戏开发日记1.分辨率：本人的手机是小米8，分辨率为2248 * 1048，所以将cocos的分辨率调到合适的大小  cocos项目建完后，找到项目工程下的win32文件夹的main.cpp，这个文件是游戏程序的入口,用于创建cocos2dx的AppDelegate实例、窗口大小、以及运行程序。  接着找到项目工程下的src文件夹，展开后打开AppDelegate.cpp，下图为">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cocos2dx开发">
 <meta property="og:url" content="www.cwpong.com/2019/07/15/cocos2dx开发/index.html">
 <meta property="og:site_name" content="但偏偏">
-<meta property="og:description" content="#cocos-2dx游戏开发日记 ###1.分辨率： 本人的手机是小米8，分辨率为2248 * 1048，所以将cocos的分辨率调到合适的大小  cocos项目建完后，找到项目工程下的win32文件夹的main.cpp，这个文件是游戏程序的入口,用于创建cocos2dx的AppDelegate实例、窗口大小、以及运行程序。  接着找到项目工程下的src文件夹，展开后打开AppDelegate.c">
+<meta property="og:description" content="cocos-2dx游戏开发日记1.分辨率：本人的手机是小米8，分辨率为2248 * 1048，所以将cocos的分辨率调到合适的大小  cocos项目建完后，找到项目工程下的win32文件夹的main.cpp，这个文件是游戏程序的入口,用于创建cocos2dx的AppDelegate实例、窗口大小、以及运行程序。  接着找到项目工程下的src文件夹，展开后打开AppDelegate.cpp，下图为">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://pubt77ygw.bkt.clouddn.com/cocos2dx01.png">
 <meta property="og:image" content="http://pubt77ygw.bkt.clouddn.com/cocos2dx02.png">
-<meta property="og:updated_time" content="2020-05-10T03:35:47.744Z">
+<meta property="og:updated_time" content="2020-05-10T06:29:50.463Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cocos2dx开发">
-<meta name="twitter:description" content="#cocos-2dx游戏开发日记 ###1.分辨率： 本人的手机是小米8，分辨率为2248 * 1048，所以将cocos的分辨率调到合适的大小  cocos项目建完后，找到项目工程下的win32文件夹的main.cpp，这个文件是游戏程序的入口,用于创建cocos2dx的AppDelegate实例、窗口大小、以及运行程序。  接着找到项目工程下的src文件夹，展开后打开AppDelegate.c">
+<meta name="twitter:description" content="cocos-2dx游戏开发日记1.分辨率：本人的手机是小米8，分辨率为2248 * 1048，所以将cocos的分辨率调到合适的大小  cocos项目建完后，找到项目工程下的win32文件夹的main.cpp，这个文件是游戏程序的入口,用于创建cocos2dx的AppDelegate实例、窗口大小、以及运行程序。  接着找到项目工程下的src文件夹，展开后打开AppDelegate.cpp，下图为">
 <meta name="twitter:image" content="http://pubt77ygw.bkt.clouddn.com/cocos2dx01.png">
 
 
@@ -352,9 +352,7 @@
       
 
       
-        <p>#cocos-2dx游戏开发日记</p>
-<p>###1.分辨率：</p>
-<p>本人的手机是小米8，分辨率为2248 * 1048，所以将cocos的分辨率调到合适的大小</p>
+        <h1 id="cocos-2dx游戏开发日记"><a href="#cocos-2dx游戏开发日记" class="headerlink" title="cocos-2dx游戏开发日记"></a>cocos-2dx游戏开发日记</h1><h3 id="1-分辨率："><a href="#1-分辨率：" class="headerlink" title="1.分辨率："></a>1.分辨率：</h3><p>本人的手机是小米8，分辨率为2248 * 1048，所以将cocos的分辨率调到合适的大小</p>
 <ul>
 <li><p>cocos项目建完后，找到项目工程下的win32文件夹的main.cpp，这个文件是游戏程序的入口,用于创建cocos2dx的AppDelegate实例、窗口大小、以及运行程序。</p>
 </li>
@@ -366,8 +364,7 @@
 <li>下图为切换到后台/前台的函数</li>
 </ul>
 <p><img src="http://pubt77ygw.bkt.clouddn.com/cocos2dx02.png" alt></p>
-<p>###2.Scene</p>
-<p>scene是游戏的直接表现场景，一个完整的游戏是由若干个scene组成的，每个scene可以视为一个关卡，而这个scene则是由导演来控制。导演控制场景有三种方法：</p>
+<h3 id="2-Scene"><a href="#2-Scene" class="headerlink" title="2.Scene"></a>2.Scene</h3><p>scene是游戏的直接表现场景，一个完整的游戏是由若干个scene组成的，每个scene可以视为一个关卡，而这个scene则是由导演来控制。导演控制场景有三种方法：</p>
 <ul>
 <li><p>runWithScene(CCScene* scene)：启动游戏，并运行scene 场景。这个方法在主程序启动时<strong>第一次</strong>启动主场景时调用。</p>
 </li>
@@ -485,8 +482,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -514,12 +520,21 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -562,6 +577,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cocos-2dx游戏开发日记"><span class="nav-number">1.</span> <span class="nav-text">cocos-2dx游戏开发日记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-分辨率："><span class="nav-number">1.0.1.</span> <span class="nav-text">1.分辨率：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Scene"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.Scene</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

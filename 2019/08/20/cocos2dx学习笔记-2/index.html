@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="#cocos2dx内存管理 管理过程:  cocos2dx采用引用计数的方式进行内存管理的，当一个对象的引用计数为0的时候就会被引擎自动delete掉，在cocos2dx中，大部分类都继承CCObject类  12345678910111213141516171819class CC_DLL CCObject : public CCCopying&amp;#123;protected:    unsign">
+<meta name="description" content="cocos2dx内存管理管理过程:  cocos2dx采用引用计数的方式进行内存管理的，当一个对象的引用计数为0的时候就会被引擎自动delete掉，在cocos2dx中，大部分类都继承CCObject类  12345678910111213141516171819class CC_DLL CCObject : public CCCopying&amp;#123;protected:    unsigned">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cocos2dx学习笔记(2)">
 <meta property="og:url" content="www.cwpong.com/2019/08/20/cocos2dx学习笔记-2/index.html">
 <meta property="og:site_name" content="但偏偏">
-<meta property="og:description" content="#cocos2dx内存管理 管理过程:  cocos2dx采用引用计数的方式进行内存管理的，当一个对象的引用计数为0的时候就会被引擎自动delete掉，在cocos2dx中，大部分类都继承CCObject类  12345678910111213141516171819class CC_DLL CCObject : public CCCopying&amp;#123;protected:    unsign">
+<meta property="og:description" content="cocos2dx内存管理管理过程:  cocos2dx采用引用计数的方式进行内存管理的，当一个对象的引用计数为0的时候就会被引擎自动delete掉，在cocos2dx中，大部分类都继承CCObject类  12345678910111213141516171819class CC_DLL CCObject : public CCCopying&amp;#123;protected:    unsigned">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-20T14:06:58.000Z">
+<meta property="og:updated_time" content="2020-05-10T06:30:20.471Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cocos2dx学习笔记(2)">
-<meta name="twitter:description" content="#cocos2dx内存管理 管理过程:  cocos2dx采用引用计数的方式进行内存管理的，当一个对象的引用计数为0的时候就会被引擎自动delete掉，在cocos2dx中，大部分类都继承CCObject类  12345678910111213141516171819class CC_DLL CCObject : public CCCopying&amp;#123;protected:    unsign">
+<meta name="twitter:description" content="cocos2dx内存管理管理过程:  cocos2dx采用引用计数的方式进行内存管理的，当一个对象的引用计数为0的时候就会被引擎自动delete掉，在cocos2dx中，大部分类都继承CCObject类  12345678910111213141516171819class CC_DLL CCObject : public CCCopying&amp;#123;protected:    unsigned">
 
 
 
@@ -327,8 +327,7 @@
       
 
       
-        <p>#cocos2dx内存管理</p>
-<p>管理过程:</p>
+        <h1 id="cocos2dx内存管理"><a href="#cocos2dx内存管理" class="headerlink" title="cocos2dx内存管理"></a>cocos2dx内存管理</h1><p>管理过程:</p>
 <ol>
 <li>cocos2dx采用引用计数的方式进行内存管理的，当一个对象的引用计数为0的时候就会被引擎自动delete掉，在cocos2dx中，大部分类都继承CCObject类</li>
 </ol>
@@ -369,12 +368,11 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CCPoolManager::push()</span><br><span class="line">&#123;</span><br><span class="line">    CCAutoreleasePool* pPool = <span class="keyword">new</span> CCAutoreleasePool();</span><br><span class="line">    m_pCurReleasePool = pPool;</span><br><span class="line">    m_pReleasrPoolStack-&gt;addObject(pPool);  <span class="comment">//ref = 2</span></span><br><span class="line">    pPool-&gt;release();   <span class="comment">//ref = `</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p> 如代码所示,push操作new了一个自动释放池对象，并且把它赋值给当前自动释放池，然后将这个自动=释放池加入到CCPoolManager里面的释放池数组中</p>
-<p>#总结:</p>
-<ol>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h1><ol>
 <li>首先new一个对象，然后执行autorelease()方法</li>
 <li>接下来是得到CCPoolManager全局对象，用它的getCurReleasePool获取当前自动释放池的对象，并将这个new的对象放入当前自动释放池对象里面的m_pManagerObjectArray数组中，修改其被管理状态m_bManaged为true。执行完这个完整的操作之后这个new出来的对象的引用次数为1，被管理状态为true，并且被放在一个管理对象的数组中。</li>
 </ol>
-<p>#资源回收<br>cocos2dx的引擎线程是单线程的，它不停地调用CCDisplayLinkDirector::mainLoop(void)来绘制当前的Scene,同时对一些自动释放的对象进行管理<br>在run函数中有个while(1)循环，不断调用mainLoop(void)方法来完成界面渲染和对象释放:</p>
+<h1 id="资源回收"><a href="#资源回收" class="headerlink" title="资源回收"></a>资源回收</h1><p>cocos2dx的引擎线程是单线程的，它不停地调用CCDisplayLinkDirector::mainLoop(void)来绘制当前的Scene,同时对一些自动释放的对象进行管理<br>在run函数中有个while(1)循环，不断调用mainLoop(void)方法来完成界面渲染和对象释放:</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CCDisplayLinkDirector::mainLoop(<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    drawScene();    <span class="comment">//场景渲染</span></span><br><span class="line">    CCPoolManager::getInstance()-&gt;pop();    <span class="comment">//对象释放</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> CCPoolManager::pop()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(!m_pCurReleasePool)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> nCount = m_pReleasePoolStack-&gt;count();</span><br><span class="line">    m_pCurReleasePool-&gt;clear(); <span class="comment">//释放对象的操作</span></span><br><span class="line">    <span class="keyword">if</span>(nCount &gt; <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        m_pReleasePoolStack-&gt;removeObjectAtIndex(nCount - <span class="number">1</span>); <span class="comment">//内存池数组里移除这个被释放过的内存池</span></span><br><span class="line">        m_pCurReleasePool = m_pReleasePoolStack-&gt;getObjectAtIndex(nCount - <span class="number">2</span>); <span class="comment">//把前一个入栈的内存池取出来，等待下一轮的释放</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>如代码所示，m_pReleasePoolStack就是之前提到的当前内存池，也就是内存池管理者里面那个内存池堆栈的栈顶的那个内存池，对其进行clear()操作，在clear()之前，被放置在自动管理池内的对象的引用次数都是为1的</p>
@@ -383,8 +381,7 @@
 <p>测试代码</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CCObject *o = <span class="keyword">new</span> CCObject();</span><br><span class="line">o-&gt;autorelease();<span class="comment">//引用次数为1 被管理状态为false</span></span><br><span class="line">o-&gt;retain();    <span class="comment">//第一帧：引用次数为2 被管理状态为true</span></span><br><span class="line"><span class="comment">//第二帧：引用次数为1，被管理状态变为false</span></span><br></pre></td></tr></table></figure>
 
-<p>#总结</p>
-<ol>
+<h1 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h1><ol>
 <li>cocos2dx采用引用计数的方式进行内存管理，谁需要引用这个对象，就对其retain()一次，同时在不需要它的时候就要对其进行release()操作，在addChild()操作时，会对child进行retain()表示对其引用,而在removeChild()的时候会对其进行release()操作.</li>
 <li>对象的autorelease()操作的效果时对象在当前这一帧被new出来后，在下一帧之前没有被执行retain()，那么这个对象在下一帧就会被引擎delete。在手动retain()后放如autorelease池，这样引擎只能将对象的引用减1，而不会delete，从而造成内存泄漏；</li>
 <li>自动管理就是在这一帧结束的时候将new出来对象时的那个引用计数减掉，而让引擎中持有对象引用的其他类去管理这个对象，当持有者析构的时候就会删除该对象；</li>
@@ -488,8 +485,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -517,12 +523,21 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -565,6 +580,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cocos2dx内存管理"><span class="nav-number">1.</span> <span class="nav-text">cocos2dx内存管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#资源回收"><span class="nav-number">3.</span> <span class="nav-text">资源回收</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结-1"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

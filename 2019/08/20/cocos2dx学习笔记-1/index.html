@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="#Cocos2dx总体框架 ##ApplicationProtocol :    应用程序协议，是一个接口 ##Application :        实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。    主要成员变量：        static Application *sm_pSharedApp">
+<meta name="description" content="Cocos2dx总体框架ApplicationProtocol :应用程序协议，是一个接口Application :    实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。  主要成员变量：     static Application *sm_pSharedApplication，这个变量保存了唯一的A">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cocos学习笔记(1)">
 <meta property="og:url" content="www.cwpong.com/2019/08/20/cocos2dx学习笔记-1/index.html">
 <meta property="og:site_name" content="但偏偏">
-<meta property="og:description" content="#Cocos2dx总体框架 ##ApplicationProtocol :    应用程序协议，是一个接口 ##Application :        实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。    主要成员变量：        static Application *sm_pSharedApp">
+<meta property="og:description" content="Cocos2dx总体框架ApplicationProtocol :应用程序协议，是一个接口Application :    实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。  主要成员变量：     static Application *sm_pSharedApplication，这个变量保存了唯一的A">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-20T14:04:46.000Z">
+<meta property="og:updated_time" content="2020-05-10T06:30:04.643Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cocos学习笔记(1)">
-<meta name="twitter:description" content="#Cocos2dx总体框架 ##ApplicationProtocol :    应用程序协议，是一个接口 ##Application :        实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。    主要成员变量：        static Application *sm_pSharedApp">
+<meta name="twitter:description" content="Cocos2dx总体框架ApplicationProtocol :应用程序协议，是一个接口Application :    实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。  主要成员变量：     static Application *sm_pSharedApplication，这个变量保存了唯一的A">
 
 
 
@@ -349,11 +349,13 @@
       
 
       
-        <p>#Cocos2dx总体框架</p>
-<p>##ApplicationProtocol :<br>    应用程序协议，是一个接口</p>
-<p>##Application :<br>        实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。<br>    主要成员变量：<br>        static Application *sm_pSharedApplication，这个变量保存了唯一的Application实例的地址。<br>    主要成员函数：<br>        virtual int run();循环处理应用程序消息，win32的环境下，run函数同时处理帧更新消息和windows消息。该函数中回调applicationDidFinishLaunching函数，即实现了应用程序的初始化（这个函数时纯虚函数，要求用户实现，一般是在AppDelegate中实现）</p>
-<p>##Dirctor :<br>        导演类，在Applicttion::run()中调用到了Dirctor::getInstance()-&gt;mainLoop函数；这个类使用单例模式实现；</p>
-<pre><code>导演类的作用:
+        <h1 id="Cocos2dx总体框架"><a href="#Cocos2dx总体框架" class="headerlink" title="Cocos2dx总体框架"></a>Cocos2dx总体框架</h1><h2 id="ApplicationProtocol"><a href="#ApplicationProtocol" class="headerlink" title="ApplicationProtocol :"></a>ApplicationProtocol :</h2><pre><code>应用程序协议，是一个接口</code></pre><h2 id="Application"><a href="#Application" class="headerlink" title="Application :"></a>Application :</h2><pre><code>    实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。 
+主要成员变量：
+    static Application *sm_pSharedApplication，这个变量保存了唯一的Application实例的地址。
+主要成员函数：
+    virtual int run();循环处理应用程序消息，win32的环境下，run函数同时处理帧更新消息和windows消息。该函数中回调applicationDidFinishLaunching函数，即实现了应用程序的初始化（这个函数时纯虚函数，要求用户实现，一般是在AppDelegate中实现）</code></pre><h2 id="Dirctor"><a href="#Dirctor" class="headerlink" title="Dirctor :"></a>Dirctor :</h2><pre><code>    导演类，在Applicttion::run()中调用到了Dirctor::getInstance()-&gt;mainLoop函数；这个类使用单例模式实现；
+
+导演类的作用:
     1. 在开始游戏和结束游戏时负责游戏的初始化和销毁工作。
     2. 管理游戏场景以及场景的切换。
     3. 设置、获取系统消息。比如调整OpenGL相关的设置，获取屏幕的大小等
@@ -375,8 +377,7 @@
     void drawScene(void);
 
     //初始化函数初始化了Scheduler（调度器）, ActionManager(动作管理器), TouchDispatcher(触屏管理器), KeypadDispatcher(派发器), 并申请内存自动清理管理器PoolManager()-&gt;push();
-    init();</code></pre><p>##总结:</p>
-<p>cocos2dx框架创建AppDelegate单例对象</p>
+    init();</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h2><p>cocos2dx框架创建AppDelegate单例对象</p>
 <p>cocos2dx框架创建EGLView单例对象并注册win窗口类和win窗口过程回调函数</p>
 <p>cocos2dx框架在EGLView类的win窗口过程回调函数中创建了Director对象并初始化了Director对象中的管理功能（调度器、动作管理器、内存释放池等）</p>
 <p>cocos2dx框架的AppDelegate的run函数调用ApplicationDidFinishLauching()入口， 完成界面元素的创建</p>
@@ -479,8 +480,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -508,12 +518,21 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -556,6 +575,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cocos2dx总体框架"><span class="nav-number">1.</span> <span class="nav-text">Cocos2dx总体框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ApplicationProtocol"><span class="nav-number">1.1.</span> <span class="nav-text">ApplicationProtocol :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Application"><span class="nav-number">1.2.</span> <span class="nav-text">Application :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dirctor"><span class="nav-number">1.3.</span> <span class="nav-text">Dirctor :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结:</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
