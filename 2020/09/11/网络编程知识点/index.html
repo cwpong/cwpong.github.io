@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="但偏偏" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="TCP/IP 1.客户端与服务器之间的信息流在其中一端是向下通过协议栈的，跨越网络之后在另一端则是向上通过协议栈 的。客户端和服务器通常是用用户进程，而TCP和IP协议通常是内核中协议栈的一部分；   2.htons - 端口网络字节序转换                 inet_pton - ip地址转换   3.从TCP套接字读取数据时，总是需要把read编写在某个循环中，当read返回0的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络编程知识点">
+<meta property="og:url" content="www.cwpong.com/2020/09/11/网络编程知识点/index.html">
+<meta property="og:site_name" content="但偏偏">
+<meta property="og:description" content="TCP/IP 1.客户端与服务器之间的信息流在其中一端是向下通过协议栈的，跨越网络之后在另一端则是向上通过协议栈 的。客户端和服务器通常是用用户进程，而TCP和IP协议通常是内核中协议栈的一部分；   2.htons - 端口网络字节序转换                 inet_pton - ip地址转换   3.从TCP套接字读取数据时，总是需要把read编写在某个循环中，当read返回0的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-11T01:33:26.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络编程知识点">
+<meta name="twitter:description" content="TCP/IP 1.客户端与服务器之间的信息流在其中一端是向下通过协议栈的，跨越网络之后在另一端则是向上通过协议栈 的。客户端和服务器通常是用用户进程，而TCP和IP协议通常是内核中协议栈的一部分；   2.htons - 端口网络字节序转换                 inet_pton - ip地址转换   3.从TCP套接字读取数据时，总是需要把read编写在某个循环中，当read返回0的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="www.cwpong.com/2020/09/11/网络编程知识点/">
+
+
+
+
+
+  <title>网络编程知识点 | 但偏偏</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+	<a href="https://github.com/cwpong" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">但偏偏</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">但偏偏风渐渐，大到我看你不见</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="www.cwpong.com/2020/09/11/网络编程知识点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈伟鹏">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/头像.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但偏偏">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络编程知识点</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-11T20:31:30+08:00">
+                2020-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络编程/" itemprop="url" rel="index">
+                    <span itemprop="name">网络编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h1><blockquote>
+<p>1.客户端与服务器之间的信息流在其中一端是向下通过协议栈的，跨越网络之后在另一端则是向上通过协议栈 的。客户端和服务器通常是用用户进程，而TCP和IP协议通常是内核中协议栈的一部分；</p>
+</blockquote>
+<blockquote>
+<p>2.htons - 端口网络字节序转换                 inet_pton - ip地址转换</p>
+</blockquote>
+<blockquote>
+<p>3.从TCP套接字读取数据时，总是需要把read编写在某个循环中，当read返回0的时候表明对端关闭或返回负数的时候表明发生错误时终止循环;</p>
+</blockquote>
+<blockquote>
+<p>4.线程函数遇到错误的时候并不设置标准Unix的errno变量，而是把errno变量作为函数返回值返回调用者，这意味着每次调用以pthread_开头的某个函数时必须分配一个变量来存放函数返回值;</p>
+</blockquote>
+<blockquote>
+<p>5.TCP是一个面向连接的协议，为用户进程提供可靠的全双工字节流。Tcp套接字是一种流套接字，其关心确认、超时和重传之类的细节；当TCP向另一端发送数据的时候它要求对端返回一个确认。如果没有收到确认TCP就自动重传数据并等待更长的时间。在数次重传失败后才放弃（4-10分钟）；TCP通过给其中每个字节关联一个序列号对所发送的数据进行排序，如果这些数据非顺序到达，接受端TCP将先根据它们的序列号重新排序再把结果数据传递给接受应用。如果接受端TCP接受到来自对端的重复数据，它会丢弃重复数据；TCP总是告知对端在任何时刻它一次能够从对端接收多少字节的数据，这称为通告窗口。在任何时刻该窗口指出接受端缓冲区中当前可用的空间量，从而确保发送端发送的数据不会使接收缓冲区溢出。</p>
+</blockquote>
+<blockquote>
+<p>6.UDP是一个无连接协议，UDP套接字是一种数据报套接字，不能保证最终数据能到达目的地；</p>
+</blockquote>
+<h1 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h1><blockquote>
+<p>1.客户端通过调用connect发起主动连接，这导致客户TCP发送一个SYN分节，它告诉服务器客户将在将建立的连接中发送的数据的初始序列号/通常SYN分节不携带数据，其所在IP数据报中只含有一个IP首部、一个TCP首部及可能有的TCP选项；</p>
+</blockquote>
+<blockquote>
+<p>2.服务器 必须确认客户的SYN，同时自己也得发送一个SYN分节，它含有服务器将在同一连接中发送和的数据的初始序列号，服务器在单个分节中发送SYN和对客户SYN的ACK；ACK中的确认号是发送这个ACK的一端所期待的下一个序列号。因为SYN占据一个字节的序列号空间，所以每一个SYN的ACK中的确认号就是该SYN的初始序列号+1；</p>
+</blockquote>
+<blockquote>
+<p>3.客户端必须确认服务器的SYN；</p>
+</blockquote>
+<h1 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h1><blockquote>
+<p>1.某个应用进程首先调用close，称该端执行主动关闭。该端的TCP于是发送一个FIN分节表示数据发送完毕；</p>
+</blockquote>
+<blockquote>
+<p>2.接收到这个FIN的对端执行被动关闭。这个FIN由TCP确认。它的接收也作为一个文件结束符传递给接收端应用程序；</p>
+</blockquote>
+<blockquote>
+<p>3.一段时间后，接收到这个文件结束符的应用程序将调用close关闭它的套接字，这导致它的TCP也发送一个FIN；</p>
+</blockquote>
+<blockquote>
+<p>4.接收这个最终FIN的原发送端TCP确认这个FIN；</p>
+</blockquote>
+<h1 id="TCP状态"><a href="#TCP状态" class="headerlink" title="TCP状态"></a>TCP状态</h1><blockquote>
+<p>1.TCP发送FIN：SYN_SENT</p>
+</blockquote>
+<blockquote>
+<p>2.TCP接收到一个带ACK的SYN，它将发送一个ACK：ESTABLISHED</p>
+</blockquote>
+<blockquote>
+<p>3.TCP主动关闭：FIN_WAIT_1</p>
+</blockquote>
+<blockquote>
+<p>4.TCP被动关闭：CLOSE_WAIT</p>
+</blockquote>
+<blockquote>
+<p>5.TIME_WAIT状态（主动关闭端）：2MSL（MSL是任何IP数据报能够在因特网中存活的最长时间）；存在的理由（1）可靠地实现TCP全双工连接的终止 （2）允许老的重复分节在网络中消逝；假设最终的ACK丢失了，服务器将重新发送它的最终那个FIN因此客户端必须维护状态信息以允许它重新发送最终的那个ACK；TCP必须防止来自某个连接的老的重复分组（关闭再打开可能IP地址和端口一样的连接）在该连接已终止后再现，保证每成功建立一个TCP连接时，来自该连接先前化身的老的重复分组都已在网络中消逝了；</p>
+</blockquote>
+<h1 id="缓冲区大小以及限制"><a href="#缓冲区大小以及限制" class="headerlink" title="缓冲区大小以及限制"></a>缓冲区大小以及限制</h1><blockquote>
+<p>1.IPv4数据报的最大大小是65275字节，包括IPv4首部</p>
+</blockquote>
+<blockquote>
+<p>2.IPv6数据报的最大大小是65575字节，包括40字节的IPv6首部</p>
+</blockquote>
+<h3 id="TCP输出"><a href="#TCP输出" class="headerlink" title="TCP输出"></a>TCP输出</h3><blockquote>
+<p>3.每一个TCP套接字都有一个发送缓冲区，可以使用SO_SNDBUF套接字选项来更改该缓冲区的大小。</p>
+</blockquote>
+<blockquote>
+<p>4.当进程调用write时，内核从该进程的缓冲区中复制所有数据到所写套接字的发送缓冲区，如果该套接字的发送缓冲区容不下该应用进程的所有数据，该应用进程将被投入睡眠，内核将不从write系统调用返回，直到应用进程缓冲区中的所有数据都复制到套接字发送缓冲区。因此从写一个TCP套接字的write调用成功返回仅仅表示可以使用原来的应用进程缓冲区，并不表明对端的TCP或应用进程已接收到数据；</p>
+</blockquote>
+<h3 id="UDP输出"><a href="#UDP输出" class="headerlink" title="UDP输出"></a>UDP输出</h3><blockquote>
+<p>5.如果一个应用进程写一个大于UDP套接字发送缓冲区大小的数据报，内核将返回该进程一个EMSGSIZE错误；</p>
+</blockquote>
+<blockquote>
+<p>6.从写一个UDP套接字的write调用成功返回表示所写的数据报或其他所有片段已被加入数据链路层的输出队列。如果该队列没有足够的空间存放该数据报或它的某个片段，内核通常会返回一个ENOBUFS错误给他的应用进程</p>
+</blockquote>
+<h1 id="套接字编程API"><a href="#套接字编程API" class="headerlink" title="套接字编程API"></a>套接字编程API</h1><blockquote>
+<p>1.POSIX规范只需要sockaddr_in中的3个字段：sin_family sin_addr.s_addr和sin_port字段</p>
+</blockquote>
+<blockquote>
+<p>2.从进程到内核传递套接字地址结构的函数有3个:bind,connect和sendto，这些函数的一个参数是指向某个套接字地址结构的指针，另一个参数是该结构的整体大小，该指针和指针所指内容和的大小传递给内核之后，内核就知道需要从进程复制多少数据进来；</p>
+</blockquote>
+<blockquote>
+<p>3.从内核到进程传递套接字地址结构的函数有4个：accept，recvfrom,getsockname和getpeername。这四个函数的其中两个参数是指向某个套接字地址结构的指针和指向表示该结构大小的整数变量的指针；当函数被调用的时候，结构大小是一个值，它告诉内核该结构的大小，这样内核在写该结构时不至于越界；当函数返回时，结构大小又是一个结界，它告诉进程内核在该结构中究竟存储了多少信息。这种类型的参数称为值-结果参数；</p>
+</blockquote>
+<h3 id="字节排序函数"><a href="#字节排序函数" class="headerlink" title="字节排序函数"></a>字节排序函数</h3><blockquote>
+<p>1.小端字节序：低序字节存储在起始地址 A+1 – A</p>
+</blockquote>
+<blockquote>
+<p>2.大端字节序：高序字节存储在起始地址 A  –  A+1</p>
+</blockquote>
+<blockquote>
+<p>3.int inet_pton(int family,const *strptr,void *addrptr) p-表达 n-数值;</p>
+</blockquote>
+<blockquote>
+<p>4.字节流套接字上调用read或者write输入或输出的字节数可能比请求的数量少，然而这不是出错的状态，这个现象的原因在于内核中用于套接字的缓冲区可能已经达到了极限，此时需要调用者再次调用read或write函数以输入或输出剩余的字节；</p>
+</blockquote>
+<h1 id="基本TCP套接字编程"><a href="#基本TCP套接字编程" class="headerlink" title="基本TCP套接字编程"></a>基本TCP套接字编程</h1><blockquote>
+<p>1.connect函数：在调用connect前不必非得调用bind函数，内核会确定源IP地址并选择一个临时端口作为源端口。connect出错返回可能有以下几种情况（1）若TCP客户端没有收到SYN分节的响应，则返回ETIMEOUT错误。（2）若对客户端的SYN的响应时RST，则表明该服务器主机在我们指定的端口没有进程在等待连接，此时客户端收到RST马上返回ECONNREFUSED错误。产生RST的三个条件：目的地为某端口的SYN到达，然而该端口上没有正在监听的服务器；TCP想取消一个已有连接；TCP接收到一个根本不存在的连接上的分节。</p>
+</blockquote>
+<blockquote>
+<p>2.bind函数：如果一个TCP客户端或服务器未曾调用bind捆绑一个端口，当调用connect或listen时,内核就要为相应的套接字选择一个临时端口。</p>
+</blockquote>
+<blockquote>
+<p>3.listen函数:把一个未连接的套接字转换成一个被动套接字，指示内核应接受指向该套接字的连接请求，调用listen函数的套接字将从CLOSED状态转换到LISTEN状态；</p>
+</blockquote>
+<blockquote>
+<p>4.内核为任何一个给定的监听套接字维护两个队列：（1）未完成连接队列：每个这样的SYN分节对应其中一项：已由某个客户发出并到达服务器，而服务器正在等待完成相应的TCP三路握手过程。这些套接字处于SYN_RCVD状态；（2）已完成连接队列：每个已完成TCP三路握手过程的客户对应其中一项。这些套接字处于ESTABLISHED状态；</p>
+</blockquote>
+<blockquote>
+<p>5.当来自客户的SYN到达时，TCP在未完成连接队列中创建一个新项，然后响应以三路握手的第二个分节：服务器的SYN响应，其中捎带对客户端SYN的ACK，这一项一直保留在未完成连接队列中，直到三路握手的第三个分节（客户端对服务器SYN的ACK）到达或者该项超时为止。如果三路握手正常完成，该项就从未完成连接队列转移到已完成的连接队列的队尾。当进程调用accept的时候，已完成连接队列中的队头项将返回给进程，如果该队列为空，那么进程将被投入睡眠直到TCP在该队列中放入一项才唤醒它；当一个客户端SYN到达时，若这些队列时满的，TCP就忽略该分节，也就是不发送RST。这么做是因为：这种情况是暂时的，客户TCP将重发SYN，期望不久就能在这些队列中找到可用空间。要是服务器TCP立即响应以一个RST，客户端connect调用就会立即返回一个错误强制应用进程处理这种情况，而不是让TCP的正常重传机制来处理。另外客户端无法区别响应SYN的RST究竟意味着“该端口没有服务器在监听”或者是“该端口有服务器在监听，但是队列满了”</p>
+</blockquote>
+<blockquote>
+<p>6.fork函数：在调用进程（称为父进程）中返回一次，返回值是新派生进程（子进程）的进程ID号；在子进程中又返回一次，返回值是0.因此返回值本身告知当前进程是子进程还是父进程；</p>
+</blockquote>
+<blockquote>
+<p>7.fork在子进程返回0而不是父进程的进程ID的原因在于：任何子进程只有一个父进程，而且子进程总是可以通过调用getppid取得父进程的进程ID。相反，父进程可以又很多子进程，而且无法获取各个子进程的进程ID。如果父进程想要跟踪所有子进程的进程ID，那么它必须记录每次调用fork的返回值;</p>
+</blockquote>
+<blockquote>
+<p>8.父进程中调用fork之前打开的所有描述符在fork返回之后由子进程分享。网络服务器利用了这个特性：父进程调用accept之后调用fork，所接受的已连接套接字随后就在父进程与子进程之间共享。通常情况下，子进程接着读写这个已连接套接字，父进程则关闭这个已连接套接字</p>
+</blockquote>
+<blockquote>
+<p>9.fork的两个典型用法：（1）一个进程创建一个自身的副本，这样每个副本都可以在另一个副本执行其他任务的同时处理各自的某个操作。（2）一个进程想要执行另一个程序，该进程首先调用fork创建一个自身的副本，然后其中一个副本（通常为子进程）调用exec把自身替换成新的程序。这是诸如shell之类程序的典型用法。</p>
+</blockquote>
+<blockquote>
+<p>10.exec：exec把当前进程映像替换成新的程序文件，而且该新程序通常从main函数开始执行，进程ID并不改变。称调用exec的进程为调用进程，称新执行的程序为新程序。</p>
+</blockquote>
+<h1 id="TCP程序"><a href="#TCP程序" class="headerlink" title="TCP程序"></a>TCP程序</h1><blockquote>
+<p>1.正常终止客户端和服务端:进程终止处理的部分工作时关闭所有打开的描述符，因此客户端打开的套接字由内核关闭，这导致客户TCP发送一个FIN给服务器，服务器TCP则以ACK响应，这就是TCP连接终止的前半部分。至此，服务器套接字处于CLOSE_WAIT状态，客户端套接字则处于FIN_WAIT_2状态。当服务器TCP收到FIN的时候，服务器阻塞于read调用并返回0；此时服务器关闭连接套接字并引发TCP连接终止序列的最后两个分节：一个从服务器到客户端的FIN和一个从客户端到服务器的ACK，至此客户端套接字进入TIME_WAIT状态；</p>
+</blockquote>
+<blockquote>
+<p>2.POSIX信号处理：信号通常时异步发生的，可以由一个进程发给另一个进程，可以由内核发给某个进程。</p>
+</blockquote>
+<blockquote>
+<p>3.可以提供一个函数，只要有特定信号发生它就被调用，这样的函数叫做信号处理函数，这种行为叫做捕获信号。有两个信号不能被捕获，它们时SIGKILL和SIGSTOP。</p>
+</blockquote>
+<blockquote>
+<p>4.信号捕获函数void handler(int signo);</p>
+</blockquote>
+<blockquote>
+<p>5.建立信号处置的POSIX方法就是调用sigaction函数</p>
+</blockquote>
+<blockquote>
+<p>6.SA_RESTART如果设置，由相应信号中断的系统调用将由内核自动重启</p>
+</blockquote>
+<blockquote>
+<p>7.处理SIGCHLD信号：设置僵死状态的目的时维护子进程信息，以便父进程在以后某个时刻获取。这些信息包括子进程的进程ID，终止状态以及资源利用信息。如果一个进程终止而该进程由子进程处于僵死状态，那么它的所有僵死子进程的父进程ID将被重置为1（init进程）。继承这些子进程的init进程将会清理它们。</p>
+</blockquote>
+<blockquote>
+<p>8.处理僵死进程：僵死进程占用内核空间，最终会导致耗尽进程资源。无论何时fork子进程都得wait它们以防它们变成僵死进程。为此需要建立一个俘获SIGCHLD信号的信号处理函数，在函数体中调用wait；</p>
+</blockquote>
+<blockquote>
+<p>9.wait和waitpid函数:<br>pid_t wait(int *statloc)<br>pid waitpid(pid_t pid,int *statloc,int options)<br>这两个函数都返回两个值：已终止子进程的进程ID号以及通过statloc指针返回的子进程终止状态（一个整数）。可以用三个宏来检查终止状态并辨别子进程时正常终止、由某个信号杀死还是仅仅由作业控制停止而已。</p>
+<p>10.如果调用wait的进程没由已终止的子进程，不过有一个或多个子进程仍在执行，那么wait将阻塞到现有子进程第一个终止为止；</p>
+</blockquote>
+<blockquote>
+<p>11.waitpid函数就等待哪个进程以及是否阻塞给了我们更多的控制。首先pid参数允许我们指定想等待的进程ID，值-1表示等待第一个终止的子进程。其次，options参数允许我们指定附加选项，最常用的选项时WNOHANG，它告知内核在没有已终止子进程时不要阻塞；</p>
+</blockquote>
+<blockquote>
+<p>12.服务器主机崩溃：当服务器主机崩溃时，已有的网络连接上不发出任何东西。客户端TCP发送出数据后试图从服务器上接收一个ACK，共持续发送一段时间后才放弃重传，此时客户端返回错误ETIMEOUT；</p>
+</blockquote>
+<blockquote>
+<p>13.服务器主机崩溃后重启：重启后它的TCP丢失了崩溃前的所有连接信息，因此服务器TCP对于所收到的来自客户的数据分节响应以一个RST；</p>
+</blockquote>
+<blockquote>
+<p>14.服务器主机关机:unix系统关机时，init进程通常先给所有进程发送SIGTERM信号，等待一段固定时间（5-20秒），然后给所有仍在运行的进程发送SIGKILL信号。这么做留给所有运行的进程一小段时间来清除和终止。</p>
+</blockquote>
+<h1 id="I-O复用"><a href="#I-O复用" class="headerlink" title="I/O复用"></a>I/O复用</h1><blockquote>
+<p>1.阻塞式I/O模型：系统调用直到数据报到达且被复制到应用进程的缓冲区中或者发生错误才返回；</p>
+</blockquote>
+<blockquote>
+<p>2.非阻塞式I/O模型：通知内核当所请求的I/O操作非得把本进程投入睡眠才能完成时，不要把本进程投入睡眠，而是返回一个错误，当一个应用进程对一个非阻塞描述符循环调用read等函数时，称之为轮询。应用进程持续轮询内核以查看某个操作是否就绪。这么做往往耗费大量CPU时间，不过这种模型偶尔也会遇到。</p>
+</blockquote>
+<blockquote>
+<p>3.I/O复用模型：select或者poll。阻塞在这两个系统调用中的某一个之上而不是阻塞在真正的I/O系统调用上。优势：select可以等待多个描述符就位;</p>
+</blockquote>
+<blockquote>
+<p>4.信号驱动式I/O模型：让内核在描述符就绪时发送SIGNO信号通知。</p>
+</blockquote>
+<blockquote>
+<p>5.异步I/O模型：告知内核启动某个操作，并让内核在整个操作完成后通知wine吧。这种模型与信号驱动I/O的主要区别在于 ：信号驱动时由内核通知我们时可以启动一个I/O操作，而异步I/O模型时由内核通知我们I/O操作何时完成。</p>
+</blockquote>
+<h1 id="select"><a href="#select" class="headerlink" title="select"></a>select</h1><blockquote>
+<p>1.该函数允许进程指示内核等待多个事件中的任何一个发生，并只在由一个或多个事件发生或者经历一段指定的时间后才唤醒它；</p>
+</blockquote>
+<blockquote>
+<p>2.函数原型: int select(int maxfdpl,fd_set <em>readset,fd_set,</em>writeset,fd_set *exceptset,const struct timeval *timeout)</p>
+</blockquote>
+<blockquote>
+<p>3.struct timeval:(1)NULL,永远等待下去，仅在由一个描述符准备号I/O时才返回 (2)非零整型：等待一段固定时间，在有一个描述符准备好I/O时返回，但是不超过由该参数所指向的时间 (3)0:根本不等待，检查描述符后立即返回，这称为轮询。</p>
+</blockquote>
+<blockquote>
+<p>4.maxfdpl参数指定待测试的描述符个数，它的值是待测试的最大描述符+1；</p>
+</blockquote>
+<blockquote>
+<p>5.select函数修改由参数三个指针所指向的描述符集，因而这三个参数都是值-结果参数。调用该函数时，指定所关心的描述符的值。该函数返回时，结果将指示哪些描述符已经就绪。该函数返回后，使用FD_ISSET宏来测试fd_set数据类型中的描述符。描述符集内任何与未就绪描述符所对应的位返回时均清成0.为此，每次重新调用select函数时都得再次把所有描述符集内所关心得位均置1；</p>
+</blockquote>
+<blockquote>
+<p>6.描述符可读就绪条件：（1）该套接字接收缓冲区中的的数据字节数大于等于套接字接收缓冲区低水位标记的当前大小，对这样的套接字执行读操作不会阻塞并返回一个大于0的数；（2）该连接的读半关闭（也就是接收了FIN的TCP连接），对这样的套接字的读操作将不阻塞并返回0； （3）该套接字是一个监听套接字且已完成的连接数不为0。对这样的套接字的accept通常不会阻塞； （4）其上有一个套接字错误待处理。对这样的套接字的读操作将不阻塞并返回-1，同时把errno设置成确切的错误条件；</p>
+</blockquote>
+<blockquote>
+<p>7.描述符可写就绪条件：（1）该套接字发送缓冲区中的可用空间字节数大于等于套接字发送缓冲区低水位标记的当前大小，并且或者该套接字已连接。这意味这如果把这样的套接字设置成非阻塞，写操作将不阻塞并返回一个正值； （2）该连接的写半部关闭。对这样的套接字的写操作将产生SIGPIPE信号； （3）使用非阻塞式connect的套接字已建立连接或者connect已经以失败告终; (4)其上有一个套接字错误待处理，对这样的套接字的写操作将不阻塞并返回1，同时把errno设置成确切的错误条件;</p>
+</blockquote>
+<blockquote>
+<p>8.select服务器:（1）select等待某个事件发送：或是新客户连接的建立，或是数据、RST或FIN的到达； （2）如果监听套接字变为可读，那么已建立了一个新的连接。调用accept并相应地更新数据结构，使用client数组地第一个未用项记录这个已连接描述符。就绪描述符数目-1，若其值变为0，就可以避免进入下一个for循环; (3)对于每个现有地客户连接要测试其描述符是否在select返回的描述符集中。如果是就从该客户读入一行文本并回射给它，如果该客户关闭了连接，那么read将返回0，此时相应更新数据结构。</p>
+</blockquote>
+<h1 id="套接字选项"><a href="#套接字选项" class="headerlink" title="套接字选项"></a>套接字选项</h1><blockquote>
+<p>1.SO_ERROR:当一个套接字上发生错误时，内核中的协议模块将该套接字的名为so_error的变量设为标准的UNIX EXXX值中的一个，称为该套接字的待处理错误。内核能够以下面两种方式之一立即通知进程这个错误。（1）如果进程阻塞在对该套接字的select调用上，那么无论时检查可读条件还是可写条件，select均返回并设置其中一个或所有两个条件； （2）如果进程使用信号驱动I/O模型，那就给进程或进程组产生一个SIGIO信号。然后进程可用通过访问SO_ERROR套接字选项获取so_error的值。由getsockopt返回的整数值就是该套接字的待处理错误。so_error随后由内核复位为0.当进程调用read且没有数据返回时，如果so_error为非0值，那么read返回-1且errno被设置为so_error的值，so_error随后被复位为0；如果在进程调用write时so_error为非0值，那么write返回-1且errno被设为so_error的值，so_error随后被复位为0；</p>
+</blockquote>
+<blockquote>
+<p>2.SO_KEEPALIVE：给一个TCP套接字设置保持存活选项后，如果2小时内在该套接字的任一方向上都没有数据交换，TCP就自动给对端发送一个保持存活探测分节。这是一个对端必须响应的TCP分节，它会导致以下三种情况之一：（1）对端以期望的ACK响应。应用程序得不到通知。在又经过仍无动静的2小时后，TCP将发出另一个探测分节； （2）对端以RST响应，它告知本端TCP：对端已奔溃且已重新启动，该套接字的待处理错误被置为ECONNRESET，套接字本身则被关闭； （3）对端对保持存活探测分节没有任何响应，TCP将另外发送8个探测分节，每次间隔75秒，试图得到一个响应。TCP在发出第一个探测分节后11分15秒内若没有得到任何响应则放弃。</p>
+</blockquote>
+<blockquote>
+<p>3.SO_KEEPALIVE选项的功能时检测对端主机是否崩溃或变得不可达，如果对端进程崩溃，它的TCP将跨连接发送一个FIN，这可用通过调用select很容易地检测到。即使对任何保持存活探测分节均无响应，也不能肯定对端主机已经崩溃，因而TCP可能会终止一个有效连接。本选项一般由服务器使用，因为服务器花大部分时间阻塞在等待穿越TCP连接地输入上，也就是说在等待客户地请求。然而如果客户主机连接掉线，电源掉电或系统崩溃，服务器永远将不会知道，并将继续等待永远不会到达地输入，称这种状态为半开连接，保持存活选项将检测出这些半开连接并终止它们；</p>
+</blockquote>
+<blockquote>
+<p>4.SO_LINGER:本选项指定close函数对面向连接地协议如何操作。默认操作时close立即返回，但是如果由数据残留在套接字发送缓冲区中，系统将试着把这些数据发送给对端。这个套接字选项可用改变默认设置，本选项要求在用户进程与内核间传递一个linger结构体，该结构体由l_onoff和l_linger构成，对setsockopt地调用将根据其中两个结构成员地值形成下列3种情形之一：（1）如果l_onoff为0，那么关闭本选项，l_linger的值被忽略，close立即返回; (2)如果l_onoff为非0值且l_linger为0，那么当close某个连接时TCP将中止该连接，也就是说TCP将丢弃保留在套接字发送缓冲区中的任何数据，并发一个RST给对端，而没有通常的四分组连接终止序列，这么一来避免了TCP的TIME_WAIT状态，然而存在以下可能性：在2MSL秒内创建该连接的另一个化身，导致来自刚被终止的连接上的旧的重复分节被不正确地递送到新的化身上； （3）如果l_onoff为非0值且l_linger也为非0值，那么当套接字关闭时内核将拖延一段时间，也就是说如果在套接字发送缓冲区中仍然残留有数据，那么进程将被投入睡眠，直到所有数据都已发送完且均被对端确认或滞延时间到。如果套接字被设置为非阻塞型时应用进程检查close地返回值时非常重要地，因为如果在数据发送完并被确认前延滞时间到的话，close将返回EWOULDBLOCK错误，且套接字发送缓冲区中的任何残留数据都被丢弃。</p>
+</blockquote>
+<blockquote>
+<p>5.假设在客户数据到达时，服务器暂时处于忙状态，那么这些数据由TCP键入到服务器的套接字接收缓冲区中。类似的下一个分节即客户的FIN也加入该套接字接收缓冲区中。默认情况下客户的close立即返回，且可能在服务器读套接字接收缓冲区中的剩余数据之前就返回。对于服务器主机来说，在服务器应用进程读这些剩余数据之前崩溃是完全可能的，而且客户应用进程永远不会知道。客户可以设置SO_LINGER套接字选项指定一个正的延滞时间，这种情况下客户的close要到它的数据和FIN已被服务器主机的TCP确认后才返回，但是在服务器应用进程读取剩余数据之前，服务器主机可能崩溃，并且客户应用进程永远不会知道。</p>
+</blockquote>
+<blockquote>
+<p>6.设置SO_LINGER套接字选项后，close的成功返回只是告诉我们先前发送的数据和FIN已由对端TCP确认，而不能告诉我们对端应用进程是否已读取数据，但是如果不设置该套接字选项，那么我们连对端TCP是否确认了数据都不知道。</p>
+</blockquote>
+<blockquote>
+<p>7.让客户知道服务器已读取其数据的一个方法是改为调用shutdown并设置关闭写端而不是调用close，并等待对端close连接的当地端；</p>
+</blockquote>
+<blockquote>
+<p>8.当关闭连接的客户端时，根据所调用的函数（close或shutdown）以及是否设置了SO_LINGER套接字选项，可在以下3个不同的时机返回（1）close立即返回，不等待； （2）close一直拖延到接收了对于客户端FIN的ACK才返回； （3）后跟一个read调用的shutdown一直等到接收了对端的FIN才返回，当客户端的read返回时我们可以保证服务器进程已读完了我们所发送的所有数据；</p>
+</blockquote>
+<blockquote>
+<p>9.SO_RCVBUF和SO_SNDBUF：接收缓冲区和发送缓冲区；接收缓冲区用来保存接收到的数据，直到由应用进程来读取。对于TCP来说，套接字接收缓冲区中可用空间的大小限定了TCP通告对端的窗口大小。TCP套接字接收缓冲区不可能溢出，因为不允许对端发出超过本端所通告窗口大小的数据，这就是TCP的流量控制。</p>
+</blockquote>
+<blockquote>
+<p>10.当设置TCP套接字接收缓冲区的大小时，函数 的调用顺序很重要，因为TCP的窗口规模选项是在建立连接时用SYN分节与对端互换得到的。对于客户端，必须在connect之前设置，对于服务，必须在listen之前设置。</p>
+</blockquote>
+<blockquote>
+<p>11.SO_RCVLOWAT和SO_SNDLOWAT：每个套接字有一个接收低水位标记和发送低水位标记，他们由select使用；接收低水位标记是让sekect返回可读时套接字接收缓冲区中所需的数据量，默认为1；发送低水位标记时让select返回可写时套接字发送缓冲区中所需的可用空间，默认为2048；</p>
+</blockquote>
+<blockquote>
+<p>12.SO_REUSEADDR和SO_REUSEPORT:SO_REUSEADDR套接字选项能起到以下不同的功用：（1）允许启动一个监听服务器并捆绑其众所周知端口，即便以前建立的将该端口用作它们的本地端口的连接仍存在； （2）允许在同一个端口上启动同一个服务器的多个实例，只要每个实例捆绑一个不同的本地IP地址即可；    </p>
+</blockquote>
+<blockquote>
+<p>13.fcntl函数:fcntl(fd,F_SETFL,O_NONBLOCK) 设置文件描述符非阻塞</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------------- <i class="fa fa-paw"></i> Thanks for your reading-------------</div>
+    
+</div>
+  
+</div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/10/数据库笔记/" rel="next" title="2019">
+                <i class="fa fa-chevron-left"></i> 2019
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/10/11/智能指针知识点/" rel="prev" title="智能指针知识点">
+                智能指针知识点 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/头像.jpg" alt="陈伟鹏">
+            
+              <p class="site-author-name" itemprop="name">陈伟鹏</p>
+              <p class="site-description motion-element" itemprop="description">程序员绝不低头</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/cwpong" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/p/1005055776276734?is_all=1" target="_blank" title="新浪微博">
+                      
+                        <i class="fa fa-fw fa-eye"></i>新浪微博</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-IP"><span class="nav-number">1.</span> <span class="nav-text">TCP/IP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三次握手"><span class="nav-number">2.</span> <span class="nav-text">三次握手</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四次挥手"><span class="nav-number">3.</span> <span class="nav-text">四次挥手</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP状态"><span class="nav-number">4.</span> <span class="nav-text">TCP状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缓冲区大小以及限制"><span class="nav-number">5.</span> <span class="nav-text">缓冲区大小以及限制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP输出"><span class="nav-number">5.0.1.</span> <span class="nav-text">TCP输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP输出"><span class="nav-number">5.0.2.</span> <span class="nav-text">UDP输出</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#套接字编程API"><span class="nav-number">6.</span> <span class="nav-text">套接字编程API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字节排序函数"><span class="nav-number">6.0.1.</span> <span class="nav-text">字节排序函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本TCP套接字编程"><span class="nav-number">7.</span> <span class="nav-text">基本TCP套接字编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP程序"><span class="nav-number">8.</span> <span class="nav-text">TCP程序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I-O复用"><span class="nav-number">9.</span> <span class="nav-text">I/O复用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#select"><span class="nav-number">10.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#套接字选项"><span class="nav-number">11.</span> <span class="nav-text">套接字选项</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈伟鹏</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>总访客
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;"></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/src/fireworks.js"></script>
+
+</body>
+</html>
