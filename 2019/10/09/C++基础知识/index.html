@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="但偏偏">
 <meta property="og:description" content="1、在构造函数、析构函数中调用虚函数问题12345678910111213141516171819202122232425262728class CBase&amp;#123;public:	CBase() &amp;#123; Fun(); &amp;#125;	virtual void Fun() 	&amp;#123;		std::cout &amp;lt;&amp;lt; &quot;This is CBase&quot; &amp;lt;&amp;lt; std::en">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-10T08:05:19.208Z">
+<meta property="og:updated_time" content="2020-05-12T01:39:30.025Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++基础知识">
 <meta name="twitter:description" content="1、在构造函数、析构函数中调用虚函数问题12345678910111213141516171819202122232425262728class CBase&amp;#123;public:	CBase() &amp;#123; Fun(); &amp;#125;	virtual void Fun() 	&amp;#123;		std::cout &amp;lt;&amp;lt; &quot;This is CBase&quot; &amp;lt;&amp;lt; std::en">
@@ -358,7 +358,7 @@
 <p>　　总结来说：基类部分在派生类部分之前被构造，当基类构造函数执行时派生类中的数据成员还没被初始化。如果基类构造函数中的虚函数调用被解析成调用派生类的虚函数，而派生类的虚函数中又访问到未初始化的派生类数据，将导致程序出现一些未定义行为和bug。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CBase</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CBase() &#123;  &#125;</span><br><span class="line">	~CBase() &#123; Fun(); &#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Fun</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Delete CBase"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CDerive</span> :</span> <span class="keyword">public</span> CBase </span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CDerive() : CBase(), m_pDate(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">2</span>)) &#123;&#125;</span><br><span class="line">	~CDerive() &#123; Fun();&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Fun</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Delete CDerive"</span> &lt;&lt;  <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">delete</span> m_pDate;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span>* m_pDate;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CBase *pB = <span class="keyword">new</span> CDerive();	<span class="comment">//打印的是Delete CBase</span></span><br><span class="line">	<span class="keyword">delete</span> pB;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>　　析构函数的执行顺序是首先调用了派生类的析构，然后再调用基类的析构函数，此时如果遇到了一个虚函数，这个时候有两种选择：1是编译器调用这个虚函数的基类版本，那么虚函数则失去了运行时调用正确版本的意义；2是编译器调用这个虚函数的派生类版本，但是此时对象的派生类部分已经完成析构，“数据成员就被视为未定义的值”，这个函数调用会导致未知行为。<br>    ps:在上述代码中原以为根据理论会先输出CDervice的析构函数（即打印”Delete CDerive”），但是实际上只执行了基类的析构函数，这是因为用CBase *pB = new CDerive()创建的是父类指针pB，只是它指向了一个新创建的子类型的对象。delete pB销毁的是父类的指针，跟子类无关，所以不执行子类的析构；只有销毁子类指针时才先执行子类析构，再执行父类析构。把CBase *pB = new CDerive()改成CDerive *pB=new CDerive（）;，销毁pB时就会输出（看来还是基础知识掌握得不够扎实啊）</p>
+<p>　　析构函数的执行顺序是首先调用了派生类的析构，然后再调用基类的析构函数，此时如果遇到了一个虚函数，这个时候有两种选择：1是编译器调用这个虚函数的基类版本，那么虚函数则失去了运行时调用正确版本的意义；2是编译器调用这个虚函数的派生类版本，但是此时对象的派生类部分已经完成析构，“数据成员就被视为未定义的值”，这个函数调用会导致未知行为。<br>    ps:在上述代码中原以为根据理论会先输出CDervice的析构函数（即打印”Delete CDerive”），但是实际上只执行了基类的析构函数（把CBase的析构函数定义为虚函数即可），这是因为用CBase *pB = new CDerive()创建的是父类指针pB，只是它指向了一个新创建的子类型的对象。delete pB销毁的是父类的指针，跟子类无关，所以不执行子类的析构；只有销毁子类指针时才先执行子类析构，再执行父类析构。把CBase *pB = new CDerive()改成CDerive *pB=new CDerive（）;，销毁pB时就会输出（看来还是基础知识掌握得不够扎实啊）</p>
 
       
     </div>
@@ -399,8 +399,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/20/cocos2dx学习笔记-3/" rel="next" title="cocos2dx学习笔记(3)">
-                <i class="fa fa-chevron-left"></i> cocos2dx学习笔记(3)
+              <a href="/2019/09/11/网络编程知识点/" rel="next" title="网络编程知识点">
+                <i class="fa fa-chevron-left"></i> 网络编程知识点
               </a>
             
           </div>
@@ -490,7 +490,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -501,7 +501,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
