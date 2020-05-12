@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="但偏偏" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Redis基础数据结构有哪些一、String(字符串)在Redis中String是可以修改的，成为动态字符串(sds)，其内部结构更像是一个ArrayList,内部维护着一个字节数组，并且在其内部预分配了一定的空间。Redis的内存分配机制是这样：  当字符串的长度小于1MB时，每次扩容都是加倍现有的空间.如果字符串长度超过1MB时，每次扩容时只会扩展1MB的空间  这样既保证了内存空间够用，还不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis知识点">
+<meta property="og:url" content="www.cwpong.com/2020/05/12/redis知识点/index.html">
+<meta property="og:site_name" content="但偏偏">
+<meta property="og:description" content="Redis基础数据结构有哪些一、String(字符串)在Redis中String是可以修改的，成为动态字符串(sds)，其内部结构更像是一个ArrayList,内部维护着一个字节数组，并且在其内部预分配了一定的空间。Redis的内存分配机制是这样：  当字符串的长度小于1MB时，每次扩容都是加倍现有的空间.如果字符串长度超过1MB时，每次扩容时只会扩展1MB的空间  这样既保证了内存空间够用，还不">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-12T07:38:23.889Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis知识点">
+<meta name="twitter:description" content="Redis基础数据结构有哪些一、String(字符串)在Redis中String是可以修改的，成为动态字符串(sds)，其内部结构更像是一个ArrayList,内部维护着一个字节数组，并且在其内部预分配了一定的空间。Redis的内存分配机制是这样：  当字符串的长度小于1MB时，每次扩容都是加倍现有的空间.如果字符串长度超过1MB时，每次扩容时只会扩展1MB的空间  这样既保证了内存空间够用，还不">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="www.cwpong.com/2020/05/12/redis知识点/">
+
+
+
+
+
+  <title>redis知识点 | 但偏偏</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+	<a href="https://github.com/cwpong" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">但偏偏</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">但偏偏风渐渐，大到我看你不见</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="www.cwpong.com/2020/05/12/redis知识点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈伟鹏">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/头像.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但偏偏">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">redis知识点</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-12T14:37:40+08:00">
+                2020-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Redis基础数据结构有哪些"><a href="#Redis基础数据结构有哪些" class="headerlink" title="Redis基础数据结构有哪些"></a>Redis基础数据结构有哪些</h3><h4 id="一、String-字符串"><a href="#一、String-字符串" class="headerlink" title="一、String(字符串)"></a>一、String(字符串)</h4><p>在Redis中String是可以修改的，成为动态字符串(sds)，其内部结构更像是一个ArrayList,内部维护着一个字节数组，并且在其内部预分配了一定的空间。<br>Redis的内存分配机制是这样：</p>
+<blockquote>
+<p>当字符串的长度小于1MB时，每次扩容都是加倍现有的空间.<br>如果字符串长度超过1MB时，每次扩容时只会扩展1MB的空间</p>
+</blockquote>
+<p>这样既保证了内存空间够用，还不至于造成内存的浪费，字符串最大长度为512MB</p>
+<p>字符串常用的命令:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> [key] [value] <span class="comment">//给指定的key设置值(set可覆盖老的值)</span></span><br><span class="line"></span><br><span class="line">get [key] <span class="comment">//获取指定key的值</span></span><br><span class="line"></span><br><span class="line">del [key] <span class="comment">//删除指定key</span></span><br><span class="line"></span><br><span class="line">exists [key] <span class="comment">//判断是否存在指定key</span></span><br><span class="line"></span><br><span class="line">mset [key1] [value1] [key2] [value2] ... <span class="comment">//批量存键值对</span></span><br><span class="line"></span><br><span class="line">mget [key1] [key2]  ... <span class="comment">//批量取key</span></span><br><span class="line"></span><br><span class="line">expire [key] [time] <span class="comment">//给指定key设置过期时间 单位秒</span></span><br><span class="line"></span><br><span class="line">setex [key] [time] [value] <span class="comment">//等价于set + expire 命令组合</span></span><br><span class="line"></span><br><span class="line">setnx [key] [value] <span class="comment">//如果key不存在则set创建，否则返回0</span></span><br><span class="line"></span><br><span class="line">incr [key] <span class="comment">//如果value为整数。可用incr命令每次自增1</span></span><br><span class="line"></span><br><span class="line">incrby [key] [num] <span class="comment">//使用incrby命令对整数值进行增加num</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="二、list-列表"><a href="#二、list-列表" class="headerlink" title="二、list(列表)"></a>二、list(列表)</h3><p>Redis中的list的插入和删除操作非常快，时间复杂度为O(1)<br>当数据量较少的时候它的底层存储结构为一块连续内存，称之为ziplist(压缩列表)，他将所有的元素紧挨着一起存储，分配的是一块连续的内存；<br>当数据量较多的时候将会变成quicklist(快速链表)结构。</p>
+<h4 id="ziplist-压缩列表"><a href="#ziplist-压缩列表" class="headerlink" title="ziplist(压缩列表)"></a>ziplist(压缩列表)</h4><p>ziplist的数据结构:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ziplist</span>&lt;T&gt;</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	int32 zlbytes; <span class="comment">//压缩列表占用字节数</span></span><br><span class="line">	int32 zltail_offset; <span class="comment">//最后一个元素距离起始位置的偏移量，用于快速定位到最后一个节点</span></span><br><span class="line">	int16 zllength; <span class="comment">//元素个数</span></span><br><span class="line">	T[] entries; <span class="comment">//元素内容</span></span><br><span class="line">	int8 zlend; <span class="comment">//结束位 0xFF</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>压缩列表为了支持双向遍历，设了ztail_offset这个字段，用来快速定位到最后一个元素。然后倒着遍历</p>
+<h4 id="list应用场景"><a href="#list应用场景" class="headerlink" title="list应用场景"></a>list应用场景</h4><blockquote>
+<p>消息队列：lpop和rpush能实现队列的功能<br>朋友圈的点赞列表、评论列表、排行榜:lpush命令和lrange命令能实现最新列表的功能，每次通过lpush命令往列表里插入新的元素，然后通过lrange命令读取最新的元素列表</p>
+</blockquote>
+<h4 id="list常用命令"><a href="#list常用命令" class="headerlink" title="list常用命令"></a>list常用命令</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">rpush [key] [value1] [value2] ... <span class="comment">//链表右侧插入</span></span><br><span class="line"></span><br><span class="line">rpop [key] <span class="comment">//移除右侧列表头元素，并返回该元素</span></span><br><span class="line"></span><br><span class="line">lpop [key] <span class="comment">//移除左侧列表头元素，并返回该元素</span></span><br><span class="line"></span><br><span class="line">llen [key] <span class="comment">//返回该列表的元素个数</span></span><br><span class="line"></span><br><span class="line">lrem [key] [count] [value] <span class="comment">//删除列表中与value相等的元素，count是删除的个数， count &gt; 0表示从左侧开始查找，删除count个元素，count &lt; 0表示从右侧开始查找，删除count个相同元素，count = 0 表示删除全部相同的元素</span></span><br><span class="line"></span><br><span class="line">lindex [key] [index] <span class="comment">//获取list指定下标的元素(需要遍历，时间复杂度为O(N))</span></span><br><span class="line"></span><br><span class="line">lrange [key] [start_index] [end_index] <span class="comment">//获取list区间内的所有元素</span></span><br><span class="line"></span><br><span class="line">ltrim [key] [start_index] [end_index] <span class="comment">//保留区间内的元素，其他元素删除</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="hash-字典"><a href="#hash-字典" class="headerlink" title="hash(字典)"></a>hash(字典)</h3><p>Redis中的Hash和Java的HashMap更加相似，都是数组+链表的结构，当发生hash碰撞的时候会将元素追加到l链表上，值得注意的是在Redis的Hash中value只能是字符串</p>
+<p>Hash和String都可以用来存储用户信息，但不同的是Hash可以对用户信息的每个字段单独存储；String存的是用户全部信息经过序列化后的字符串，如果想要修改某个用户字段必须将用户信息字符串全部查询出来，解析成相应的用户信息，修改完后在序列化成字符串存入。而hash可以只对某个字段修改，从而节约网络流量，不过hash内存占用要大于String</p>
+<h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景:"></a>应用场景:</h4><blockquote>
+<p>购物车:hset [key] [field] [value]命令，可以实现以用户ID，商品ID为field， 商品数量为value，恰好构成了购物车的3个要素<br>存储对象:hash类型的(key, field, value)的结构与对象的(对象id, 属性, 值)的结构相似，也可以用来存储对象</p>
+</blockquote>
+<h4 id="hash常用的操作命令"><a href="#hash常用的操作命令" class="headerlink" title="hash常用的操作命令:"></a>hash常用的操作命令:</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">hset [key] [field] [value] <span class="comment">//新建字段信息</span></span><br><span class="line"></span><br><span class="line">hget [key] [field] <span class="comment">//获取字段信息</span></span><br><span class="line"></span><br><span class="line">hdel [key] [field] <span class="comment">//删除字段</span></span><br><span class="line"></span><br><span class="line">hlen [key] <span class="comment">//保存的字段个数</span></span><br><span class="line"></span><br><span class="line">hgetall [key] <span class="comment">//获取指定key字典里的所有字段和值</span></span><br><span class="line"></span><br><span class="line">hmset [key] [field1] [value1] [field2] [value2] <span class="comment">//批量创建</span></span><br><span class="line"></span><br><span class="line">hincr [key] [field] <span class="comment">//对字段值自增</span></span><br><span class="line"></span><br><span class="line">hincrby [key] [field] [num] <span class="comment">//对字段值增加num</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="set-集合"><a href="#set-集合" class="headerlink" title="set(集合)"></a>set(集合)</h3><p>Redis 中的 set和Java中的HashSet 有些类似，它内部的键值对是无序的、唯一 的。它的内部实现相当于一个特殊的字典，字典中所有的value都是一个值 NULL。当集合中最后一个元素被移除之后，数据结构被自动删除，内存被回收。</p>
+<h4 id="应用场景："><a href="#应用场景：" class="headerlink" title="应用场景："></a>应用场景：</h4><blockquote>
+<p>好友、关注、粉丝、感兴趣的人集合：<br>        sinter命令可以获得A和B两个用户的共同好友；<br>        sismember命令可以判断A是否是B的好友；<br>        scard命令可以获取好友数量；<br>        关注时，smove命令可以将B从A的粉丝集合转移到A的好友集合<br>首页展示随机：美团首页有很多推荐商家，但是并不能全部展示，set类型适合存放所有需要展示的内容，而srandmember命令则可以从中随机获取几个。<br>存储某活动中中奖的用户ID ，因为有去重功能，可以保证同一个用户不会中奖两次。</p>
+</blockquote>
+<h4 id="set的常用命令"><a href="#set的常用命令" class="headerlink" title="set的常用命令:"></a>set的常用命令:</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sadd  [key]  [value]  向指定key的<span class="built_in">set</span>中添加元素</span><br><span class="line"></span><br><span class="line">smembers [key]    获取指定key 集合中的所有元素</span><br><span class="line"></span><br><span class="line">sismember [key] [value]   判断集合中是否存在某个value</span><br><span class="line"></span><br><span class="line">scard [key]    获取集合的长度</span><br><span class="line"></span><br><span class="line">spop  [key]   弹出一个元素</span><br><span class="line"></span><br><span class="line">srem [key] [value]  删除指定元素</span><br></pre></td></tr></table></figure>
+
+<h3 id="zset-有序集合"><a href="#zset-有序集合" class="headerlink" title="zset(有序集合)"></a>zset(有序集合)</h3><p>set也叫SortedSet一方面它是个 set ，保证了内部 value 的唯一性，另方面它可以给每个 value 赋予一个score，代表这个value的排序权重。它的内部实现用的是一种叫作“跳跃列表”的数据结构。</p>
+<h4 id="应用场景：-1"><a href="#应用场景：-1" class="headerlink" title="应用场景："></a>应用场景：</h4><blockquote>
+<p>zset 可以用做排行榜，但是和list不同的是zset它能够实现动态的排序，例如： 可以用来存储粉丝列表，value 值是粉丝的用户 ID，score 是关注时间，我们可以对粉丝列表按关注时间进行排序。</p>
+</blockquote>
+<blockquote>
+<p>zset 还可以用来存储学生的成绩， value 值是学生的 ID, score 是他的考试成绩。 我们对成绩按分数进行排序就可以得到他的名次。</p>
+</blockquote>
+<h4 id="zset有序集合的常用命令"><a href="#zset有序集合的常用命令" class="headerlink" title="zset有序集合的常用命令:"></a>zset有序集合的常用命令:</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">zadd [key] [score] [value] 向指定key的集合中增加元素</span><br><span class="line"></span><br><span class="line">zrange [key] [start_index] [end_index] 获取下标范围内的元素列表，按score 排序输出</span><br><span class="line"></span><br><span class="line">zrevrange [key] [start_index] [end_index]  获取范围内的元素列表 ，按score排序 逆序输出</span><br><span class="line"></span><br><span class="line">zcard [key]  获取集合列表的元素个数</span><br><span class="line"></span><br><span class="line">zrank [key] [value]  获取元素再集合中的排名</span><br><span class="line"></span><br><span class="line">zrangebyscore [key] [score1] [score2]  输出score范围内的元素列表</span><br><span class="line"></span><br><span class="line">zrem [key] [value]  删除元素</span><br><span class="line"></span><br><span class="line">zscore [key] [value] 获取元素的score</span><br></pre></td></tr></table></figure>
+
+<p>(ps)由于本人工作中未曾使用过redis，只在业余时间搭建过redis以及使用过一些简单的命令，本文主要是转载于CSDN<br>原文链接：<a href="https://blog.csdn.net/xinzhifu1/article/details/104350271" target="_blank" rel="noopener">https://blog.csdn.net/xinzhifu1/article/details/104350271</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------------- <i class="fa fa-paw"></i> Thanks for your reading-------------</div>
+    
+</div>
+  
+</div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/11/为什么要使用虚函数？/" rel="next" title="为什么要使用虚函数？">
+                <i class="fa fa-chevron-left"></i> 为什么要使用虚函数？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/头像.jpg" alt="陈伟鹏">
+            
+              <p class="site-author-name" itemprop="name">陈伟鹏</p>
+              <p class="site-description motion-element" itemprop="description">程序员绝不低头</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/cwpong" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/p/1005055776276734?is_all=1" target="_blank" title="新浪微博">
+                      
+                        <i class="fa fa-fw fa-eye"></i>新浪微博</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis基础数据结构有哪些"><span class="nav-number">1.</span> <span class="nav-text">Redis基础数据结构有哪些</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、String-字符串"><span class="nav-number">1.1.</span> <span class="nav-text">一、String(字符串)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、list-列表"><span class="nav-number">2.</span> <span class="nav-text">二、list(列表)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ziplist-压缩列表"><span class="nav-number">2.1.</span> <span class="nav-text">ziplist(压缩列表)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#list应用场景"><span class="nav-number">2.2.</span> <span class="nav-text">list应用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#list常用命令"><span class="nav-number">2.3.</span> <span class="nav-text">list常用命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hash-字典"><span class="nav-number">3.</span> <span class="nav-text">hash(字典)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#应用场景"><span class="nav-number">3.1.</span> <span class="nav-text">应用场景:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hash常用的操作命令"><span class="nav-number">3.2.</span> <span class="nav-text">hash常用的操作命令:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-集合"><span class="nav-number">4.</span> <span class="nav-text">set(集合)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#应用场景："><span class="nav-number">4.1.</span> <span class="nav-text">应用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#set的常用命令"><span class="nav-number">4.2.</span> <span class="nav-text">set的常用命令:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zset-有序集合"><span class="nav-number">5.</span> <span class="nav-text">zset(有序集合)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#应用场景：-1"><span class="nav-number">5.1.</span> <span class="nav-text">应用场景：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zset有序集合的常用命令"><span class="nav-number">5.2.</span> <span class="nav-text">zset有序集合的常用命令:</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈伟鹏</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>总访客
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;"></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/src/fireworks.js"></script>
+
+</body>
+</html>
