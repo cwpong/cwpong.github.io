@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="Cocos2dx总体框架ApplicationProtocol :应用程序协议，是一个接口Application :    实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。  主要成员变量：     static Application *sm_pSharedApplication，这个变量保存了唯一的A">
+<meta name="description" content="URG与PSH两者相同点： URG与PSH两者都使用于紧急处理的情况，用来快速传输紧急数据。  两者不同点 URG置为1时，对于发送方，“带外数据”与正常情况下应该发送的消息数据一起，封装成数据报发送，省去了在队列中等待的时间。 在接收方，解析报文后，获取数据之后还是要放在缓存区中，等待满了之后在向上往应用层交付。   PSH置为1时，对于发送方，表明这些数据不需要等向下发送的缓存区满，立刻封装成">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cocos学习笔记(1)">
-<meta property="og:url" content="www.cwpong.com/2019/08/20/cocos2dx学习笔记-1/index.html">
+<meta property="og:title" content="URG与PSH">
+<meta property="og:url" content="www.cwpong.com/2020/05/13/URG与PSH/index.html">
 <meta property="og:site_name" content="但偏偏">
-<meta property="og:description" content="Cocos2dx总体框架ApplicationProtocol :应用程序协议，是一个接口Application :    实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。  主要成员变量：     static Application *sm_pSharedApplication，这个变量保存了唯一的A">
+<meta property="og:description" content="URG与PSH两者相同点： URG与PSH两者都使用于紧急处理的情况，用来快速传输紧急数据。  两者不同点 URG置为1时，对于发送方，“带外数据”与正常情况下应该发送的消息数据一起，封装成数据报发送，省去了在队列中等待的时间。 在接收方，解析报文后，获取数据之后还是要放在缓存区中，等待满了之后在向上往应用层交付。   PSH置为1时，对于发送方，表明这些数据不需要等向下发送的缓存区满，立刻封装成">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-10T06:30:04.643Z">
+<meta property="og:updated_time" content="2020-05-13T05:59:58.218Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cocos学习笔记(1)">
-<meta name="twitter:description" content="Cocos2dx总体框架ApplicationProtocol :应用程序协议，是一个接口Application :    实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。  主要成员变量：     static Application *sm_pSharedApplication，这个变量保存了唯一的A">
+<meta name="twitter:title" content="URG与PSH">
+<meta name="twitter:description" content="URG与PSH两者相同点： URG与PSH两者都使用于紧急处理的情况，用来快速传输紧急数据。  两者不同点 URG置为1时，对于发送方，“带外数据”与正常情况下应该发送的消息数据一起，封装成数据报发送，省去了在队列中等待的时间。 在接收方，解析报文后，获取数据之后还是要放在缓存区中，等待满了之后在向上往应用层交付。   PSH置为1时，对于发送方，表明这些数据不需要等向下发送的缓存区满，立刻封装成">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="www.cwpong.com/2019/08/20/cocos2dx学习笔记-1/">
+  <link rel="canonical" href="www.cwpong.com/2020/05/13/URG与PSH/">
 
 
 
 
 
-  <title>Cocos学习笔记(1) | 但偏偏</title>
+  <title>URG与PSH | 但偏偏</title>
   
 
 
@@ -255,7 +255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="www.cwpong.com/2019/08/20/cocos2dx学习笔记-1/">
+    <link itemprop="mainEntityOfPage" href="www.cwpong.com/2020/05/13/URG与PSH/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈伟鹏">
@@ -272,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Cocos学习笔记(1)</h1>
+          <h1 class="post-title" itemprop="name headline">URG与PSH</h1>
         
 
         <div class="post-meta">
@@ -284,8 +284,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-20T21:55:52+08:00">
-                2019-08-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-13T13:58:11+08:00">
+                2020-05-13
               </time>
             
 
@@ -307,8 +307,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cocos2dx/" itemprop="url" rel="index">
-                    <span itemprop="name">cocos2dx</span>
+                  <a href="/categories/网络编程/" itemprop="url" rel="index">
+                    <span itemprop="name">网络编程</span>
                   </a>
                 </span>
 
@@ -349,39 +349,15 @@
       
 
       
-        <h1 id="Cocos2dx总体框架"><a href="#Cocos2dx总体框架" class="headerlink" title="Cocos2dx总体框架"></a>Cocos2dx总体框架</h1><h2 id="ApplicationProtocol"><a href="#ApplicationProtocol" class="headerlink" title="ApplicationProtocol :"></a>ApplicationProtocol :</h2><pre><code>应用程序协议，是一个接口</code></pre><h2 id="Application"><a href="#Application" class="headerlink" title="Application :"></a>Application :</h2><pre><code>    实现了ApplicationProtocol接口规则的调用，负责提供应用程序初始化接口（通过AppDelegate重载虚函数），实现消息循环。 
-主要成员变量：
-    static Application *sm_pSharedApplication，这个变量保存了唯一的Application实例的地址。
-主要成员函数：
-    virtual int run();循环处理应用程序消息，win32的环境下，run函数同时处理帧更新消息和windows消息。该函数中回调applicationDidFinishLaunching函数，即实现了应用程序的初始化（这个函数时纯虚函数，要求用户实现，一般是在AppDelegate中实现）</code></pre><h2 id="Dirctor"><a href="#Dirctor" class="headerlink" title="Dirctor :"></a>Dirctor :</h2><pre><code>    导演类，在Applicttion::run()中调用到了Dirctor::getInstance()-&gt;mainLoop函数；这个类使用单例模式实现；
-
-导演类的作用:
-    1. 在开始游戏和结束游戏时负责游戏的初始化和销毁工作。
-    2. 管理游戏场景以及场景的切换。
-    3. 设置、获取系统消息。比如调整OpenGL相关的设置，获取屏幕的大小等
-
-主要成员函数：
-    //获取OpenGL View的大小 单位为点
-    Size getWinSize(void);
-
-    //获取OpenGL View显示区域大小 单位为点
-    //如果没调用EGLView::setDesignResolutionSize()，则值和getWinSize()相等
-    Size getVisibleSize();
-
-    //运行场景
-    void runWithScene(Scene *pScene);
-    void pushScene(Scene *pScene);
-    void popScene(void);
-
-    //绘制场景
-    void drawScene(void);
-
-    //初始化函数初始化了Scheduler（调度器）, ActionManager(动作管理器), TouchDispatcher(触屏管理器), KeypadDispatcher(派发器), 并申请内存自动清理管理器PoolManager()-&gt;push();
-    init();</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h2><p>cocos2dx框架创建AppDelegate单例对象</p>
-<p>cocos2dx框架创建EGLView单例对象并注册win窗口类和win窗口过程回调函数</p>
-<p>cocos2dx框架在EGLView类的win窗口过程回调函数中创建了Director对象并初始化了Director对象中的管理功能（调度器、动作管理器、内存释放池等）</p>
-<p>cocos2dx框架的AppDelegate的run函数调用ApplicationDidFinishLauching()入口， 完成界面元素的创建</p>
-<p>cocos2dx框架的AppDelegate的run函数按照默认帧率循环调用Director::getInstance()-&gt;mainLoop()来不断显示win窗口</p>
+        <h3 id="URG与PSH两者相同点："><a href="#URG与PSH两者相同点：" class="headerlink" title="URG与PSH两者相同点："></a>URG与PSH两者相同点：</h3><blockquote>
+<p>URG与PSH两者都使用于紧急处理的情况，用来快速传输紧急数据。</p>
+</blockquote>
+<h3 id="两者不同点"><a href="#两者不同点" class="headerlink" title="两者不同点"></a>两者不同点</h3><blockquote>
+<p>URG置为1时，对于发送方，“带外数据”与正常情况下应该发送的消息数据一起，封装成数据报发送，省去了在队列中等待的时间。 在接收方，解析报文后，获取数据之后还是要放在缓存区中，等待满了之后在向上往应用层交付。</p>
+</blockquote>
+<blockquote>
+<p>PSH置为1时，对于发送方，表明这些数据不需要等向下发送的缓存区满，立刻封装成报文，发送，省去了等待发送缓存区到达满的状态的时间。 在接收方，也不需要等接受缓存区满，直接向上交付给应用层。</p>
+</blockquote>
 
       
     </div>
@@ -416,8 +392,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/15/cocos2dx开发/" rel="next" title="cocos2dx开发">
-                <i class="fa fa-chevron-left"></i> cocos2dx开发
+              <a href="/2020/05/12/redis知识点/" rel="next" title="redis知识点">
+                <i class="fa fa-chevron-left"></i> redis知识点
               </a>
             
           </div>
@@ -425,10 +401,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/20/cocos2dx学习笔记-2/" rel="prev" title="cocos2dx学习笔记(2)">
-                cocos2dx学习笔记(2) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -585,7 +557,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cocos2dx总体框架"><span class="nav-number">1.</span> <span class="nav-text">Cocos2dx总体框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ApplicationProtocol"><span class="nav-number">1.1.</span> <span class="nav-text">ApplicationProtocol :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Application"><span class="nav-number">1.2.</span> <span class="nav-text">Application :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dirctor"><span class="nav-number">1.3.</span> <span class="nav-text">Dirctor :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结:</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#URG与PSH两者相同点："><span class="nav-number">1.</span> <span class="nav-text">URG与PSH两者相同点：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两者不同点"><span class="nav-number">2.</span> <span class="nav-text">两者不同点</span></a></li></ol></div>
             
 
           </div>
