@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="但偏偏">
 <meta property="og:description" content="Redis基础数据结构有哪些一、String(字符串)在Redis中String是可以修改的，成为动态字符串(sds)，其内部结构更像是一个ArrayList,内部维护着一个字节数组，并且在其内部预分配了一定的空间。Redis的内存分配机制是这样：  当字符串的长度小于1MB时，每次扩容都是加倍现有的空间.如果字符串长度超过1MB时，每次扩容时只会扩展1MB的空间  这样既保证了内存空间够用，还不">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-12T07:38:23.889Z">
+<meta property="og:updated_time" content="2020-05-12T08:03:35.501Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis知识点">
 <meta name="twitter:description" content="Redis基础数据结构有哪些一、String(字符串)在Redis中String是可以修改的，成为动态字符串(sds)，其内部结构更像是一个ArrayList,内部维护着一个字节数组，并且在其内部预分配了一定的空间。Redis的内存分配机制是这样：  当字符串的长度小于1MB时，每次扩容都是加倍现有的空间.如果字符串长度超过1MB时，每次扩容时只会扩展1MB的空间  这样既保证了内存空间够用，还不">
@@ -380,7 +380,7 @@
 </blockquote>
 <h4 id="set的常用命令"><a href="#set的常用命令" class="headerlink" title="set的常用命令:"></a>set的常用命令:</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sadd  [key]  [value]  向指定key的<span class="built_in">set</span>中添加元素</span><br><span class="line"></span><br><span class="line">smembers [key]    获取指定key 集合中的所有元素</span><br><span class="line"></span><br><span class="line">sismember [key] [value]   判断集合中是否存在某个value</span><br><span class="line"></span><br><span class="line">scard [key]    获取集合的长度</span><br><span class="line"></span><br><span class="line">spop  [key]   弹出一个元素</span><br><span class="line"></span><br><span class="line">srem [key] [value]  删除指定元素</span><br></pre></td></tr></table></figure>
 
-<h3 id="zset-有序集合"><a href="#zset-有序集合" class="headerlink" title="zset(有序集合)"></a>zset(有序集合)</h3><p>set也叫SortedSet一方面它是个 set ，保证了内部 value 的唯一性，另方面它可以给每个 value 赋予一个score，代表这个value的排序权重。它的内部实现用的是一种叫作“跳跃列表”的数据结构。</p>
+<h3 id="zset-有序集合"><a href="#zset-有序集合" class="headerlink" title="zset(有序集合)"></a>zset(有序集合)</h3><p>zset也叫SortedSet一方面它是个 set ，保证了内部 value 的唯一性，另方面它可以给每个 value 赋予一个score，代表这个value的排序权重。它的内部实现用的是一种叫作“跳跃列表”的数据结构。</p>
 <h4 id="应用场景：-1"><a href="#应用场景：-1" class="headerlink" title="应用场景："></a>应用场景：</h4><blockquote>
 <p>zset 可以用做排行榜，但是和list不同的是zset它能够实现动态的排序，例如： 可以用来存储粉丝列表，value 值是粉丝的用户 ID，score 是关注时间，我们可以对粉丝列表按关注时间进行排序。</p>
 </blockquote>
@@ -424,8 +424,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/11/为什么要使用虚函数？/" rel="next" title="为什么要使用虚函数？">
-                <i class="fa fa-chevron-left"></i> 为什么要使用虚函数？
+              <a href="/2020/01/13/i++和++i/" rel="next" title="i++和++i">
+                <i class="fa fa-chevron-left"></i> i++和++i
               </a>
             
           </div>
@@ -511,7 +511,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
