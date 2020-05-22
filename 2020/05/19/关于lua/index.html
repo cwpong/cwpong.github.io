@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="www.cwpong.com">
-  <title>Category: cocos2dx | 但偏偏</title>
+  <title>关于lua | 但偏偏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="程序员绝不低头">
-<meta property="og:type" content="website">
-<meta property="og:title" content="但偏偏">
-<meta property="og:url" content="www.cwpong.com/categories/cocos2dx/index.html">
+  <meta name="description" content="本文主要记录Lua中的面向对象,参考自lua菜鸟教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于lua">
+<meta property="og:url" content="www.cwpong.com/2020/05/19/关于lua/index.html">
 <meta property="og:site_name" content="但偏偏">
-<meta property="og:description" content="程序员绝不低头">
+<meta property="og:description" content="本文主要记录Lua中的面向对象,参考自lua菜鸟教程">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-19T02:16:46.847Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="但偏偏">
-<meta name="twitter:description" content="程序员绝不低头">
+<meta name="twitter:title" content="关于lua">
+<meta name="twitter:description" content="本文主要记录Lua中的面向对象,参考自lua菜鸟教程">
   
     <link rel="alternative" href="/atom.xml" title="但偏偏" type="application/atom+xml">
   
@@ -137,174 +138,187 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-关于lua" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于lua
+    </h1>
+  
+
+        
+        <a href="/2020/05/19/关于lua/" class="archive-article-date">
+  	<time datetime="2020-05-19T01:29:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-19</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文主要记录Lua中的面向对象,参考自lua菜鸟教程</p>
+<a id="more"></a>
+<h3 id="Lua元表"><a href="#Lua元表" class="headerlink" title="Lua元表"></a>Lua元表</h3><blockquote>
+<p>setmetable(table, metatable)：对指定table设置元表(metatable)，如果元表中存在_metatable键值，setmetatable会失败<br>getmetatable(table)：返回对象的元表</p>
+</blockquote>
+<p>为什么lua面向对象需要先介绍lua元表呢？这是因为lua设计的思想是元编程，并没有面向对象的实现，但是可以利用lua的元表机制来实现面向对象:</p>
+<h3 id="index"><a href="#index" class="headerlink" title="__index"></a>__index</h3><p>如果<strong>index包含一个函数的话,lua就会调用那个函数，table和键会作为参数传递给韩函数<br>lua查找一个表元素时的规则，其实就是如下3个步骤<br>    1.在表中查找，如果找到，返回该元素，找不到则继续<br>    2.判断该表是否有元表，如果没有元表，返回nil，有元表则继续<br>    3.判断元表中有没有</strong>index方法，如果<strong>index方法为nil,则返回nil;如果</strong>index方法是一个表，则重复上诉步骤；如果__index方法是一个函数，则返回该函数的返回值</p>
+<blockquote>
+<p>表是lua中的基础数据类型之一，也是lua中唯一的数据结构，类在本质上也是一个表</p>
+</blockquote>
+<h3 id="通过元表方式实现的Account类"><a href="#通过元表方式实现的Account类" class="headerlink" title="通过元表方式实现的Account类"></a>通过元表方式实现的Account类</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Account = &#123;balance = <span class="number">0</span>&#125;</span><br><span class="line"></span><br><span class="line">function Account:withdraw (v)</span><br><span class="line">    self.balance = self.balance - v</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">function Account:deposit (v)</span><br><span class="line">    self.balance = self.balance + v</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">--创建Account类的对象的方法</span><br><span class="line">function Account:<span class="keyword">new</span> (o)</span><br><span class="line">    o = o <span class="keyword">or</span> &#123;&#125; --create object <span class="keyword">if</span> user does <span class="keyword">not</span> provide one</span><br><span class="line">    setmetatable(o, self)</span><br><span class="line">    self.__index = self</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>方法内部先构造一张表o，并将其Metatable和元方法<strong>index均设置为self。这里将</strong>index设置为一张表是lua语法上的便利，它的本质还是一个函数.<br>当调用a = Account:new()创建一个新的Account对象时, new方法里的self就指向Account。也就是说，现在a的Metatable和<strong>index元方法均指向Account，那么就实现了一个简单的继承.<br>接下来调用a:deposit(100),lua在表a中找不到deposit,于是会先看它有没有元表，如果有，再看它的元表里有没有</strong>index元方法或__index对应的表，这二者缺一不可.<br>最后的结果查到了deposit方法</p>
+<h3 id="index和newindex的作用"><a href="#index和newindex的作用" class="headerlink" title="index和newindex的作用"></a><strong>index和</strong>newindex的作用</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">original = &#123;&#125; <span class="comment">--原始表</span></span><br><span class="line"></span><br><span class="line">mt = &#123;&#125;</span><br><span class="line"></span><br><span class="line">mt.index = <span class="function"><span class="keyword">function</span><span class="params">(t, k)</span></span>   <span class="comment">--此表的访问操作，都会访问original表</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"update table element "</span> .. <span class="built_in">tostring</span>(k) .. <span class="string">" : "</span> .. <span class="built_in">tostring</span>(original[k]) .. <span class="string">" to "</span> .. <span class="built_in">tostring</span>(v))</span><br><span class="line">    original[k] = v</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">t = &#123;&#125;  <span class="comment">--监控表，用来监控original</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">setmetatable</span>(t, mt)</span><br><span class="line">t[<span class="number">1</span>] = <span class="string">"hello"</span>  <span class="comment">--update table element 1 : nil to hello</span></span><br><span class="line">str = t[<span class="number">1</span>] .. <span class="string">"world"</span>   <span class="comment">--access table element 1 : hello</span></span><br><span class="line"><span class="built_in">print</span>(str)  <span class="comment">--helloworld</span></span><br></pre></td></tr></table></figure>
+
+<p>当访问一个表的不存在的域时，会触发访问<strong>index方法。当表缺少一个赋值域时，会触发访问</strong>newindex方法</p>
+<h3 id="lua类和对象"><a href="#lua类和对象" class="headerlink" title="lua类和对象"></a>lua类和对象</h3><p>当创建一个对象作为其他对象的原型，当调用不属于该对象的方法时，会去原型中查找</p>
+<blockquote>
+<p>setmetatable(a, {__index = b})<br>上诉b是原型，a是原型的对象（概念上称b是类，a是b的实例对象），调用a中不存在的对象时，会去b中查找</p>
+</blockquote>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Cal = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cal:New</span> <span class="params">(o)</span></span></span><br><span class="line">    o = o <span class="keyword">or</span> &#123;&#125;</span><br><span class="line">    <span class="built_in">setmetatable</span>(o, self)</span><br><span class="line">    self.<span class="built_in">__index</span> = self</span><br><span class="line">    <span class="keyword">return</span> o</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cal:Add</span><span class="params">(a, b)</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Cal Add"</span>)</span><br><span class="line">    <span class="keyword">return</span> a+b</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">a = Cal:New()</span><br><span class="line"><span class="built_in">print</span>(a:Add(<span class="number">5</span>, <span class="number">6</span>))</span><br></pre></td></tr></table></figure>
+
+<p>调用Cal:New实际会返回一个以Cal自己为元表的新对象，而a中没有Add方法，则会在Cal中查找Add方法</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/18/c-构造函数为什么只能用引用作为参数/" class="archive-article-date">
-  	<time datetime="2019-09-18T08:56:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/18/c-构造函数为什么只能用引用作为参数/">c++拷贝构造函数为什么只能用引用作为参数</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
+      
 
-
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http:www.cwpong.com/2020/05/19/关于lua/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/20/cocos2dx学习笔记-3/" class="archive-article-date">
-  	<time datetime="2019-08-20T14:07:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2020/05/21/c#单例模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          c#单例模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/05/18/c++拷贝构造函数为什么只能用引用作为参数/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">c++构造函数为什么只能用引用作为参数</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/20/cocos2dx学习笔记-3/">cocos2dx学习笔记(3)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/20/cocos2dx学习笔记-1/" class="archive-article-date">
-  	<time datetime="2019-08-20T13:55:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/20/cocos2dx学习笔记-1/">Cocos学习笔记(1)</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/15/cocos2dx开发/" class="archive-article-date">
-  	<time datetime="2019-07-15T12:31:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/15/cocos2dx开发/">cocos2dx开发</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -327,10 +341,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",

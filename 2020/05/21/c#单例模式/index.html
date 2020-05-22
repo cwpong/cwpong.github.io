@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="www.cwpong.com">
-  <title>Category: cocos2dx | 但偏偏</title>
+  <title>c#单例模式 | 但偏偏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="程序员绝不低头">
-<meta property="og:type" content="website">
-<meta property="og:title" content="但偏偏">
-<meta property="og:url" content="www.cwpong.com/categories/cocos2dx/index.html">
+  <meta name="description" content="在学习unity以及C#语言，通过C#的设计模式来熟悉一些语法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c#单例模式">
+<meta property="og:url" content="www.cwpong.com/2020/05/21/c#单例模式/index.html">
 <meta property="og:site_name" content="但偏偏">
-<meta property="og:description" content="程序员绝不低头">
+<meta property="og:description" content="在学习unity以及C#语言，通过C#的设计模式来熟悉一些语法">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-21T02:33:39.419Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="但偏偏">
-<meta name="twitter:description" content="程序员绝不低头">
+<meta name="twitter:title" content="c#单例模式">
+<meta name="twitter:description" content="在学习unity以及C#语言，通过C#的设计模式来熟悉一些语法">
   
     <link rel="alternative" href="/atom.xml" title="但偏偏" type="application/atom+xml">
   
@@ -137,174 +138,172 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-c#单例模式" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      c#单例模式
+    </h1>
+  
+
+        
+        <a href="/2020/05/21/c#单例模式/" class="archive-article-date">
+  	<time datetime="2020-05-21T02:31:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-21</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在学习unity以及C#语言，通过C#的设计模式来熟悉一些语法</p>
+<a id="more"></a>
+<h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><h4 id="1-什么是单例模式"><a href="#1-什么是单例模式" class="headerlink" title="1.什么是单例模式:"></a>1.什么是单例模式:</h4><pre><code>单例模式从字面上来说就是一个类只有一个实例，官方定义为：确保一个类只有一个实例，并提供一个全局访问点：</code></pre><h4 id="2-单例模式使用场景："><a href="#2-单例模式使用场景：" class="headerlink" title="2.单例模式使用场景："></a>2.单例模式使用场景：</h4><pre><code>在我的工作项目中，需要一个文件管理类来对项目的文件进行操作。而操作文件时，同一时间内只允许一个实例对文件操作，这时候就可以将这个文件操作类设计为单例模式；
+在Unity开发中，可以将一些只能存在一个实例的类设计为单例模式：例如主角类，也能将数据库连接设计为单例模式</code></pre><h4 id="3-单例模式的实现思路"><a href="#3-单例模式的实现思路" class="headerlink" title="3.单例模式的实现思路:"></a>3.单例模式的实现思路:</h4><blockquote>
+<p>1.将构造函数设为私有（因为单例模式只能通过GetInstance()来获取唯一单例，不能通过new来创建）<br>2.将实例变量设为静态私有变量<br>3.提供一个public方法让外界获取这个实例变量</p>
+</blockquote>
+<h4 id="4-单例模式代码实现"><a href="#4-单例模式代码实现" class="headerlink" title="4.单例模式代码实现"></a>4.单例模式代码实现</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton</span><br><span class="line">&#123;</span><br><span class="line">	//定义一个私有静态变量来保存类的实例</span><br><span class="line">	private static Singleton m_Instance;</span><br><span class="line">	//定义一个锁来保证线程同步安全</span><br><span class="line">	private static readonly object locker = new object();</span><br><span class="line">	//将构造函数设为私有</span><br><span class="line">	private Singleton()&#123;&#125;</span><br><span class="line">	//公共访问点</span><br><span class="line">	public statoc Singleton GetInstance()</span><br><span class="line">	&#123;</span><br><span class="line">		if(null == m_Instance)</span><br><span class="line">		&#123;</span><br><span class="line">			//第一次访问(实例为null) 上锁</span><br><span class="line">			lock(locker)</span><br><span class="line">			&#123;</span><br><span class="line">				if(null == m_Instance)</span><br><span class="line">				&#123;</span><br><span class="line">					m_Instance = new Singleton();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		return m_Instance;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/18/c-构造函数为什么只能用引用作为参数/" class="archive-article-date">
-  	<time datetime="2019-09-18T08:56:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/18/c-构造函数为什么只能用引用作为参数/">c++拷贝构造函数为什么只能用引用作为参数</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
+      
 
-
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http:www.cwpong.com/2020/05/21/c#单例模式/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/20/cocos2dx学习笔记-3/" class="archive-article-date">
-  	<time datetime="2019-08-20T14:07:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2020/05/22/关于字节排序函数/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          关于字节排序函数
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/05/19/关于lua/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关于lua</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/20/cocos2dx学习笔记-3/">cocos2dx学习笔记(3)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/20/cocos2dx学习笔记-1/" class="archive-article-date">
-  	<time datetime="2019-08-20T13:55:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/20/cocos2dx学习笔记-1/">Cocos学习笔记(1)</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/15/cocos2dx开发/" class="archive-article-date">
-  	<time datetime="2019-07-15T12:31:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/15/cocos2dx开发/">cocos2dx开发</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -327,10 +326,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
