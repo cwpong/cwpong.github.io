@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="www.cwpong.com">
-  <title>Archives | 但偏偏</title>
+  <title>TCP编程中的api | 但偏偏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="程序员绝不低头">
-<meta property="og:type" content="website">
-<meta property="og:title" content="但偏偏">
-<meta property="og:url" content="www.cwpong.com/archives/page/3/index.html">
+  <meta name="description" content="关于socket编程中的几个api">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP编程中的api">
+<meta property="og:url" content="www.cwpong.com/2020/05/22/TCP编程中的api/index.html">
 <meta property="og:site_name" content="但偏偏">
-<meta property="og:description" content="程序员绝不低头">
+<meta property="og:description" content="关于socket编程中的几个api">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-22T02:58:03.757Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="但偏偏">
-<meta name="twitter:description" content="程序员绝不低头">
+<meta name="twitter:title" content="TCP编程中的api">
+<meta name="twitter:description" content="关于socket编程中的几个api">
   
     <link rel="alternative" href="/atom.xml" title="但偏偏" type="application/atom+xml">
   
@@ -137,193 +138,198 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-TCP编程中的api" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      TCP编程中的api
+    </h1>
+  
+
+        
+        <a href="/2020/05/22/TCP编程中的api/" class="archive-article-date">
+  	<time datetime="2020-05-22T02:28:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-22</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>关于socket编程中的几个api</p>
+<a id="more"></a>
+
+
+<h3 id="connet函数"><a href="#connet函数" class="headerlink" title="connet函数"></a>connet函数</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys.socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> cockfd, <span class="keyword">const</span> struct sockaddr* servaddr, <span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>​</p>
+<p>客户端在调用这个函数之前如果没有调用bind,此函数会给客户端自动分配ip和端口号；此函数会激发TCP的三次握手过程;</p>
+<p>函数出错的情况:</p>
+<blockquote>
+<p>1.若TCP客户端没有收到SYN分节的响应(ACK),则返回ETIMEOUT错误;</p>
+</blockquote>
+<blockquote>
+<p>2.若对客户端的SYN的响应是RST（表示复位），则表明该服务器主机在指定的端口上没有等待的连接。这是一种硬错误，客户端一接受到RST就马上返回ECONNREFUSED错误。产生RST的三个条件:(1)本条说明的原因; (2)TCP想取消一个已有连接; (3)TCP收到一个根本不存在的连接上的分节;</p>
+</blockquote>
+<blockquote>
+<p>3.若客户端发出的SYN在中间的某个路由器上引发了一个”destination unreachable” ICMP错误，则认为这是一个中软错误。客户端主机内核保存该信息，并按一定时间间隔继续发送SYN。若规定时间仍未收到响应，则把保存的信息作为EHOSTUNREACH或ENETUNREACH错误返回给进程;</p>
+</blockquote>
+<p>​</p>
+<h3 id="listen函数"><a href="#listen函数" class="headerlink" title="listen函数"></a>listen函数</h3><p>此函数的调用在socket和bind之后，在accept之前。建立的监听套接字维护着两个分组：未完成连接队列(队列中的套接字未完成三次握手，处于SYN_RCVD状态)、已完成连接队列(队列中的套接字已经完成三次握手并处于ESTABLISTEND状态)</p>
+<p>​</p>
+<h3 id="close函数"><a href="#close函数" class="headerlink" title="close函数"></a>close函数</h3><p>close一个TCP套接字会将套接字标记为关闭，然后立即返回到调用调用进程。该套接字描述符不能再由调用进程使用，也就是说不能在作为read和write的第一个参数。但是发送队列的数据还会发送，发送完毕之后就是正常的TCP的4次挥手</p>
+<p>close的关闭只是减少相应描述符的应用计数，在多进程或者多线程的程序中，引用计数较多的情况，即使调用close也不会对TCP连接进行关闭，这个时候可以使用shutdown代替close,shutdown的调用一定会引起4次挥手的过程</p>
+<p>​</p>
+<p>​</p>
+<p>connet函数</p>
+<pre><code>#include &lt;sys.socket.h&gt;
+int connect(int cockfd, const struct sockaddr* servaddr, socklen_t addrlen);</code></pre><p>客户端在调用这个函数之前如果没有调用bind,此函数会给客户端自动分配ip和端口号；此函数会激发TCP的三次握手过程;<br>函数出错的情况:</p>
+<pre><code>1.若TCP客户端没有收到SYN分节的响应(ACK),则返回ETIMEOUT错误;
+2.若对客户端的SYN的响应是RST（表示复位），则表明该服务器主机在指定的端口上没有等待的连接。这是一种硬错误，客户端一接受到RST就马上返回ECONNREFUSED错误。产生RST的三个条件:(1)本条说明的原因; (2)TCP想取消一个已有连接; (3)TCP收到一个根本不存在的连接上的分节;
+3.若客户端发出的SYN在中间的某个路由器上引发了一个”destination unreachable” ICMP错误，则认为这是一个中软错误。客户端主机内核保存该信息，并按一定时间间隔继续发送SYN。若规定时间仍未收到响应，则把保存的信息作为EHOSTUNREACH或ENETUNREACH错误返回给进程; </code></pre><p>listen函数</p>
+<p>此函数的调用在socket和bind之后，在accept之前。建立的监听套接字维护着两个分组：未完成连接队列(队列中的套接字未完成三次握手，处于SYN_RCVD状态)、已完成连接队列(队列中的套接字已经完成三次握手并处于ESTABLISTEND状态)<br>close函数</p>
+<p>close一个TCP套接字会将套接字标记为关闭，然后立即返回到调用调用进程。该套接字描述符不能再由调用进程使用，也就是说不能在作为read和write的第一个参数。但是发送队列的数据还会发送，发送完毕之后就是正常的TCP的4次挥手<br>close的关闭只是减少相应描述符的应用计数，在多进程或者多线程的程序中，引用计数较多的情况，即使调用close也不会对TCP连接进行关闭，这个时候可以使用shutdown代替close,shutdown的调用一定会引起4次挥手的过程</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/20/cocos2dx学习笔记-1/" class="archive-article-date">
-  	<time datetime="2019-08-20T13:55:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/20/cocos2dx学习笔记-1/">Cocos学习笔记(1)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
+        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http:www.cwpong.com/2020/05/22/TCP编程中的api/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/15/cocos2dx开发/" class="archive-article-date">
-  	<time datetime="2019-07-15T12:31:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-15</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/22/关于字节排序函数/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关于字节排序函数</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/15/cocos2dx开发/">cocos2dx开发</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/07/XML解析/" class="archive-article-date">
-  	<time datetime="2019-07-07T06:37:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-07</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/07/XML解析/">XML解析</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/04/我的第一篇博客/" class="archive-article-date">
-  	<time datetime="2019-07-04T13:33:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/04/我的第一篇博客/">windows消息机制</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/05/11/new和delete/" class="archive-article-date">
-  	<time datetime="2019-05-11T08:30:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/05/11/new和delete/">new和delete</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/c//" class="article-tag-list-link color4">c++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span>
-    </nav>
   
 
 
@@ -347,8 +353,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
