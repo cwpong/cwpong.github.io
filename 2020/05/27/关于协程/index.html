@@ -6,15 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="www.cwpong.com">
-  <title>Archives | 但偏偏</title>
+  <title>关于协程 | 但偏偏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="但偏偏">
-<meta property="og:url" content="www.cwpong.com/archives/page/2/index.html">
+  <meta name="description" content="学unity的过程中比较不理解协程，记录一下lua协程和unity协程的用法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于协程">
+<meta property="og:url" content="www.cwpong.com/2020/05/27/关于协程/index.html">
 <meta property="og:site_name" content="但偏偏">
+<meta property="og:description" content="学unity的过程中比较不理解协程，记录一下lua协程和unity协程的用法">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-27T03:45:09.898Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="但偏偏">
+<meta name="twitter:title" content="关于协程">
+<meta name="twitter:description" content="学unity的过程中比较不理解协程，记录一下lua协程和unity协程的用法">
   
     <link rel="alternative" href="/atom.xml" title="但偏偏" type="application/atom+xml">
   
@@ -134,415 +138,199 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-关于协程" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于协程
+    </h1>
+  
+
+        
+        <a href="/2020/05/27/关于协程/" class="archive-article-date">
+  	<time datetime="2020-05-27T02:05:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-27</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>学unity的过程中比较不理解协程，记录一下lua协程和unity协程的用法</p>
+<a id="more"></a>
+<h3 id="什么是协程-coroutine"><a href="#什么是协程-coroutine" class="headerlink" title="什么是协程(coroutine)"></a>什么是协程(coroutine)</h3><p>协程即协同式多线程，Lua为每个协程提供一个独立的运行线路。然而和多线程不同的地方就是，协程只有在显式调用yield函数后才会被挂起，且同一时间内只有一个协程在运行</p>
+<h3 id="协程相关的函数"><a href="#协程相关的函数" class="headerlink" title="协程相关的函数"></a>协程相关的函数</h3><blockquote>
+<p>coroutine.create(f):接受单个参数，这个参数就是要执行的函数<br>coroutine.resume(co,[value1,…]):第一个参数是coroutine.create的返回值，第二个参数是可变长参数，当第一次调用该函数时，coroutine从主函数的第一行开始执行，之后在coroutine开始运行后，它会一直运行到自身终止或者是coroutine的下一个yield函数<br>coroutine.yield(…):传入变长参数，该函数挂起当前执行的协程</p>
+</blockquote>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例:"></a>实例:</h3><h4 id="1-开启一个协程"><a href="#1-开启一个协程" class="headerlink" title="1.开启一个协程"></a>1.开启一个协程</h4><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--创建一个协程，但还没有调用</span></span><br><span class="line">co = coroutine.<span class="built_in">create</span>(</span><br><span class="line">	<span class="function"><span class="keyword">function</span><span class="params">(i)</span></span></span><br><span class="line">		<span class="built_in">print</span>(i);</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">--开启协程</span></span><br><span class="line">coroutine.<span class="built_in">resume</span>(co, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">status</span>(co))	<span class="comment">--dead</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-挂起一个协程"><a href="#2-挂起一个协程" class="headerlink" title="2.挂起一个协程"></a>2.挂起一个协程</h4><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">co = coroutine.<span class="built_in">create</span>(</span><br><span class="line">	<span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">		<span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">10</span> <span class="keyword">do</span></span><br><span class="line">			<span class="built_in">print</span>(i)</span><br><span class="line">			<span class="keyword">if</span>(i == <span class="number">3</span>) <span class="keyword">then</span></span><br><span class="line">				<span class="built_in">print</span>(coroutine.<span class="built_in">status</span>(co))</span><br><span class="line">				<span class="built_in">print</span>(coroutine.<span class="built_in">running</span>)</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			coroutine.<span class="built_in">yield</span>()</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">coroutine.<span class="built_in">resume</span>(co)</span><br><span class="line">coroutine.<span class="built_in">resume</span>(co)</span><br><span class="line">coroutine.<span class="built_in">resume</span>(co)</span><br><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">status</span>(co))</span><br><span class="line"><span class="built_in">print</span>(coroutine.<span class="built_in">running</span>())</span><br></pre></td></tr></table></figure>
+
+<p>执行resume函数时，create的函数就会被执行，当遇到yield的时候就代表挂起当前线程，等待再次执行resume</p>
+<h3 id="unity中的协程"><a href="#unity中的协程" class="headerlink" title="unity中的协程"></a>unity中的协程</h3><blockquote>
+<p>unity协程实现的主要组成:</p>
+<ul>
+<li>1.IEnumerator接口 提供迭代</li>
+<li>2.yield return xxx 指定下一次迭代入口</li>
+<li>3.WaitForFixedUpdate 在FixedUpdate后执行，适用于物理控制</li>
+<li>4.null、0、WaitForSeconds 在每帧Update后执行，适用于分多帧完成一个任务，如A*路径计算</li>
+<li><ol start="5">
+<li>WaitForEndOfFrame 在每帧结束后执行，适合于每帧末尾执行的操作，如相机控制</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>IEnumerator与协程同时使用</p>
+</blockquote>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">private IEnumerator Start()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">yield</span> <span class="keyword">return</span> new WaiForSeconds(<span class="number">1</span>);</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"第一次输出"</span>);</span><br><span class="line">	<span class="built_in">yield</span> <span class="keyword">return</span> new WaiForSeconds(<span class="number">2</span>);</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"第二次输出"</span>);</span><br><span class="line">	<span class="built_in">yield</span> <span class="keyword">return</span> new WaiForSeconds(<span class="number">3</span>);</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"第三次输出"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>若是在自定义方法中使用协程，则在调用该方法的时候需要使用StartCoroutine()来调用协程方法<br>在Update、FixedUpdate等类似方法当中不能使用协程，但是能调用协程方法</p>
+</blockquote>
+<blockquote>
+<p>协程的启动方式<br>StartCoroutine(Function())<br>StartCoroutine(Function(arg))</p>
+</blockquote>
+<blockquote>
+<p>在FixedUpdate结束后才执行的协程</p>
+</blockquote>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">bool canExcute = <span class="literal">true</span>;</span><br><span class="line">void FixedUpdate()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(canExcute)</span><br><span class="line">	&#123;</span><br><span class="line">		Debug.Log(<span class="string">"FixedUpdate"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">IEnumerator Coroutine_WaiteForFixedUpdate()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">yield</span> retuen new WaitForFixedUpdate();</span><br><span class="line">	Debug.Log(<span class="built_in">string</span>.Format(<span class="string">"&#123;0&#125; time:&#123;1&#125;"</span>. <span class="number">1.</span> Time.<span class="built_in">time</span>));</span><br><span class="line">	<span class="built_in">yield</span> retuen new WaitForFixedUpdate();</span><br><span class="line">	Debug.Log(<span class="built_in">string</span>.Format(<span class="string">"&#123;0&#125; time:&#123;1&#125;"</span>. <span class="number">2.</span> Time.<span class="built_in">time</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>用协程输出10组计数（每组5次，每次1秒）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">using System.Collections;</span><br><span class="line">using UnityEngine</span><br><span class="line"></span><br><span class="line">public class mCoroutine : MonoBehaviour</span><br><span class="line">&#123;</span><br><span class="line">	public float time = 1;</span><br><span class="line">	</span><br><span class="line">	void Awake()</span><br><span class="line">	&#123;</span><br><span class="line">		StartCoroutine(FirstLayerCoroutine());</span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	IEnumerator FirstLayerCoroutine()</span><br><span class="line">	&#123;</span><br><span class="line">		for(int i = 0; i &lt; 10; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			Debug.Log(string.Format(&quot;第&#123;0&#125;组&quot;， i + 1));</span><br><span class="line">			yield return StartCoroutine(SecondLayerCorutine());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	IEnumerator SecondLayerCoroutine()</span><br><span class="line">	&#123;</span><br><span class="line">		for(int i = 0; i &lt; 5; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			Debug.Log(string.Format(&quot;&#123;0&#125;&quot;, i + 1));</span><br><span class="line">			yield return new WaiForSeconds(time);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/01/12/4种类型转换/" class="archive-article-date">
-  	<time datetime="2020-01-12T11:21:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/01/12/4种类型转换/">4种类型转换</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
       
-        </div></section>
+
       
+
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/12/11/为什么要使用虚函数？/" class="archive-article-date">
-  	<time datetime="2019-12-11T06:06:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/12/11/为什么要使用虚函数？/">为什么要使用虚函数？</a>
-    </h1>
-  
+      </div>
+    </span>
+  </div>
+</div>
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http:www.cwpong.com/2020/05/27/关于协程/" alt="微信分享二维码">
+    </div>
+</div>
 
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/15/初始化列表/" class="archive-article-date">
-  	<time datetime="2019-10-15T05:55:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-15</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/22/TCP编程中的api/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">TCP编程中的api</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/15/初始化列表/">初始化列表</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/12/实现一个简单的智能指针/" class="archive-article-date">
-  	<time datetime="2019-10-12T06:54:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-12</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/12/实现一个简单的智能指针/">实现一个简单的智能指针</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/c//" class="article-tag-list-link color4">c++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/11/智能指针知识点/" class="archive-article-date">
-  	<time datetime="2019-10-11T01:35:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/11/智能指针知识点/">智能指针知识点</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/10/数据库笔记/" class="archive-article-date">
-  	<time datetime="2019-10-10T03:16:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/10/数据库笔记/">2019</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/09/C++基础知识/" class="archive-article-date">
-  	<time datetime="2019-10-09T06:48:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/09/C++基础知识/">C++基础知识</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/18/c-构造函数为什么只能用引用作为参数/" class="archive-article-date">
-  	<time datetime="2019-09-18T08:56:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/18/c-构造函数为什么只能用引用作为参数/">c++拷贝构造函数为什么只能用引用作为参数</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/11/网络编程知识点/" class="archive-article-date">
-  	<time datetime="2019-09-11T12:31:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/11/网络编程知识点/">网络编程知识点</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/网络编程//" class="article-tag-list-link color5">网络编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/20/cocos2dx学习笔记-3/" class="archive-article-date">
-  	<time datetime="2019-08-20T14:07:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/20/cocos2dx学习笔记-3/">cocos2dx学习笔记(3)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -566,8 +354,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
