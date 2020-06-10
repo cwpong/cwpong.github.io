@@ -6,15 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="www.cwpong.com">
-  <title>但偏偏</title>
+  <title>shader(1) | 但偏偏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="但偏偏">
-<meta property="og:url" content="www.cwpong.com/page/3/index.html">
+  <meta name="description" content="shader的一些基础语法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shader(1)">
+<meta property="og:url" content="www.cwpong.com/2020/06/10/shader-1/index.html">
 <meta property="og:site_name" content="但偏偏">
+<meta property="og:description" content="shader的一些基础语法">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-10T01:09:34.955Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="但偏偏">
+<meta name="twitter:title" content="shader(1)">
+<meta name="twitter:description" content="shader的一些基础语法">
   
     <link rel="alternative" href="/atom.xml" title="但偏偏" type="application/atom+xml">
   
@@ -130,180 +134,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-数据库笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-shader-1" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/10/数据库笔记/">2019</a>
+    <h1 class="article-title" itemprop="name">
+      shader(1)
     </h1>
   
 
         
-        <a href="/2019/10/10/数据库笔记/" class="archive-article-date">
-  	<time datetime="2019-10-10T03:16:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-10</time>
+        <a href="/2020/06/10/shader-1/" class="archive-article-date">
+  	<time datetime="2020-06-10T01:08:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>数据库学习笔记</p>
-        
+        <p>shader的一些基础语法</p>
+<a id="more"></a>
+<h3 id="关于Shader（1）"><a href="#关于Shader（1）" class="headerlink" title="关于Shader（1）"></a>关于Shader（1）</h3><blockquote>
+<p>原理：写一个函数,以UVs或者一些数据为入口，然后以SurfaceOutput为输出。同时在SurfaceOutput这个结构体含有不同的属性。对于这个函数来说，它的执行过程会生成顶点的元素的Shader,并且传递一些渲染的路径</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">struct SurfaceOutput</span><br><span class="line">&#123;</span><br><span class="line">	half3 Albedo;	//漫反射的颜色值</span><br><span class="line">	half3 Normal;	//法线坐标</span><br><span class="line">	half3 Emission;		//自发光颜色</span><br><span class="line">	half Specular;		//镜面反射系数</span><br><span class="line">	half Gloss;		//光泽系数</span><br><span class="line">	half Alpha;		//透明度系数</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个shader的实例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line">//Shader所在的路径</span><br><span class="line">Shader &quot;Example/Diffuse Simple&quot;</span><br><span class="line">&#123;</span><br><span class="line">	Properties</span><br><span class="line">	&#123;</span><br><span class="line">		_MainTex(&quot;Texture&quot;, 2D) = &quot;white&quot;&#123;&#125;	//可供选择图片的控件</span><br><span class="line">		</span><br><span class="line">		//name(&quot;display name&quot; ,Range(min, max)) = number</span><br><span class="line">		//定义浮点数属性，在检视面板中可通过一个范围滑条来修改</span><br><span class="line">		_MyColor(&quot;MyColor&quot;, Range(0, 10)) = 7</span><br><span class="line">		</span><br><span class="line">		//name(&quot;display name&quot;, Color) = (number, number, number, number)</span><br><span class="line">		//通过RGB定义颜色属性</span><br><span class="line">		_RefrColor(&quot;Refraction color&quot;, Color) = (.34, .85, .92, 1)</span><br><span class="line">		</span><br><span class="line">		//name(&quot;display name&quot;, Rect) = &quot;name&quot; &#123; options &#125;</span><br><span class="line">		//定义长方纹理属性</span><br><span class="line">		_DisplayRect(&quot;Display Rect&quot;, Rect) = &quot;white&quot;</span><br><span class="line">		</span><br><span class="line">		//name(&quot;display name&quot;, Cube) = &quot;name&quot; &#123;option&#125;</span><br><span class="line">		//定义立方贴图纹理属性</span><br><span class="line">		_DisplayCube(&quot;Display Cube&quot;, Cube) = &quot;&quot;</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		//name(&quot;display name&quot;, Float) = number</span><br><span class="line">		//定义浮点数属性</span><br><span class="line">		_DisplayFloat(&quot;Display Float&quot;, Float) = 20.1</span><br><span class="line">		</span><br><span class="line">		//name(&quot;display name&quot;, Vector) = (number, number, number, number)</span><br><span class="line">		//定义四个向量组成的属性</span><br><span class="line">		_DisplayVector(&quot;Display Vector&quot;, Vector) = (1, 1, 1, 1)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	SubShader</span><br><span class="line">	&#123;</span><br><span class="line">		Tags&#123;</span><br><span class="line">			//RenderType:将着色器分类为若干预定义组</span><br><span class="line">			//----Opaque:用于大多数着色器（如法线着色器，自发光着色器，反射着色器以及地形的着色器）</span><br><span class="line">			//----Transparent:用于半透明着色器（透明着色器，粒子着色器，字体着色器，地形额外通道的着色器）</span><br><span class="line">			//----TransparentCutout:蒙皮透明着色器（两个通道的植被着色器）</span><br><span class="line">			//----Background:天空盒着色器</span><br><span class="line">			//----Overlay:光晕着色器，闪光着色器</span><br><span class="line">			//----TreeOpaque:地形引擎中的树皮</span><br><span class="line">			//----TreeTransparentCutout:地形引擎中的树叶</span><br><span class="line">			//----TreeBillboard:地形引擎中的广告牌树</span><br><span class="line">			//----Grass:地形引擎中的草</span><br><span class="line">			//----GrassBillboard:地形引擎中的广告牌草</span><br><span class="line">			&quot;RenderType&quot; = &quot;Opaque&quot;，</span><br><span class="line">			</span><br><span class="line">			//Queue:渲染队列</span><br><span class="line">			//----Background(1000):最先渲染，通常绘制作为背景的物体，例如天空盒子</span><br><span class="line">			//----Geometry(2000):默认的队列，大部分不透明的物体使用这个队列</span><br><span class="line">			//----AlphaTest(2450):需要Alpha Test的物体使用此队列，单独处理是因为处理完不透明物体后进行alpha测试更高效</span><br><span class="line">			//----Transparent(3000):这个渲染队列是在Geometry和Alpha Test之后按从后往前的顺序渲染的，任何alpha混合（即着色器不写入深度缓冲）应该在这里（玻璃，粒子特效等）</span><br><span class="line">			//----Overlay(4000):这个渲染队列用于一些叠加效果，最后渲染的东西应该在这里（比如镜头光斑，后处理）</span><br><span class="line">			 &quot;Queue&quot; = &quot;Transparent&quot;</span><br><span class="line">			 </span><br><span class="line">			 //DisableBatching: 一些着色器（主要是对象空间顶点变形的着色器）在使用绘制调用批处理时不起作用，这是因为批处理将所有几何图形转换为世界空间，因此“对象空间”丢失了。</span><br><span class="line">			 //----&quot;True&quot;:对于使用此属性的shader总是不合批</span><br><span class="line">			 //----&quot;False&quot;:默认值，总是合批</span><br><span class="line">			 //----&quot;LODFading&quot;:当LOD衰减激活时，不合批，大多用于树</span><br><span class="line">			 &quot;DisableBatching = &quot;True&quot;</span><br><span class="line">			 </span><br><span class="line">			 //ForceNoShadowCasting：如果给定了这个标签并将该标签的值设为&quot;True&quot;，那么使用该子着色器呈现的对象将永远不会投射阴影（透明对象）</span><br><span class="line">			 &quot;ForceNoShadowCasting = &quot;True&quot;</span><br><span class="line">			 </span><br><span class="line">			 //IgnoreProjector:如果给定了这个标签并将该标签的值设为&quot;True&quot;，那么使用这个着色器的对象将不会受到投影的影响，这在半透明物体上很有用</span><br><span class="line">			 &quot;IgnoreProjectot =&quot; &quot;Flase&quot;(默认)</span><br><span class="line">			 </span><br><span class="line">			 //</span><br><span class="line">			 &#125;</span><br><span class="line"></span><br><span class="line">		CGPROGRAM</span><br><span class="line"></span><br><span class="line">		//里面制定响应方法为surf且采用Lambert的光照模型</span><br><span class="line">		#pragma surface surf Lambert</span><br><span class="line">		</span><br><span class="line">		//uv_MainTex:uv开头指代后方材质的uv值</span><br><span class="line">		//Sampler2D:再次声明并链接了_MainTex，使得接下来的CG程序能够使用这个变量。</span><br><span class="line">		struct Input &#123; float2 uv_MainTex; &#125;; sampler2D _MainTex;	//使用Properties里的_MainTex</span><br><span class="line"></span><br><span class="line">		//这个结构体名字不能改，只能为Input,里面是一个四元素的颜色值</span><br><span class="line">		//struct Input&#123; float4 color : COLOR;&#125;;</span><br><span class="line"></span><br><span class="line">		//arg1:纯输入的上诉结构体参数</span><br><span class="line">		//arg2:inout标识，意思是可为输入参数也可以为输出参数</span><br><span class="line">		void surf( Input IN, inout SurfaceOutput o)</span><br><span class="line">		&#123;</span><br><span class="line">			//这是CG程序中用来在一张贴图中对一个点进行采样的方法，返回一个float4。这里对_MainTex在输入点上进行了采样，并将其颜色的rbg值赋予了输出的像素颜色，将a值赋予透明度</span><br><span class="line">			//tex2d:根据对应材质上所有的点找到指定2DSample上的Texture信息，此处需要其RGB信息。对有材质图的情况下，要显示出图，还需要相应的反射该图的RGB值</span><br><span class="line">			half4 c = tex2D (_MainTex, IN.uv_MainTex);</span><br><span class="line">			o.Albedo = c.rgb;</span><br><span class="line">			o.Alpha = c.a;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		ENDCG</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Fallback &quot;Diffuse&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
       
 
       
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/10/数据库笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-C++基础知识" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/09/C++基础知识/">C++基础知识</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/09/C++基础知识/" class="archive-article-date">
-  	<time datetime="2019-10-09T06:48:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>构造函数、析构函数中能否调用虚函数</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/09/C++基础知识/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c-构造函数为什么只能用引用作为参数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/18/c-构造函数为什么只能用引用作为参数/">c++拷贝构造函数为什么只能用引用作为参数</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/18/c-构造函数为什么只能用引用作为参数/" class="archive-article-date">
-  	<time datetime="2019-09-18T08:56:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于C++拷贝构造函数</p>
-        
-      
-
       
     </div>
     <div class="article-info article-info-index">
@@ -315,7 +199,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
+        			<a href="/categories/unity//" class="article-tag-list-link color1">unity</a>
         		</li>
       		
 		</ul>
@@ -323,16 +207,84 @@
 
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/18/c-构造函数为什么只能用引用作为参数/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http:www.cwpong.com/2020/06/10/shader-1/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/06/10/shader-2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          shader(2)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/10/unity自定义编辑器/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">unity自定义编辑器</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -352,498 +304,14 @@
 
 
 
-
-  
-    <article id="post-网络编程知识点" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/11/网络编程知识点/">网络编程知识点</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/11/网络编程知识点/" class="archive-article-date">
-  	<time datetime="2019-09-11T12:31:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>网络编程基础知识点</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/网络编程//" class="article-tag-list-link color5">网络编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/11/网络编程知识点/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-cocos2dx学习笔记-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/20/cocos2dx学习笔记-3/">cocos2dx学习笔记(3)</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/20/cocos2dx学习笔记-3/" class="archive-article-date">
-  	<time datetime="2019-08-20T14:07:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>cocos-2dx定时器相关</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/20/cocos2dx学习笔记-3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-cocos2dx学习笔记-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/20/cocos2dx学习笔记-2/">cocos2dx学习笔记(2)</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/20/cocos2dx学习笔记-2/" class="archive-article-date">
-  	<time datetime="2019-08-20T14:06:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>cocos-2dx内存管理相关</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/20/cocos2dx学习笔记-2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-cocos2dx学习笔记-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/20/cocos2dx学习笔记-1/">Cocos学习笔记(1)</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/20/cocos2dx学习笔记-1/" class="archive-article-date">
-  	<time datetime="2019-08-20T13:55:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>cocos-2dx基础知识</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/20/cocos2dx学习笔记-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-cocos2dx开发" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/15/cocos2dx开发/">cocos2dx开发</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/15/cocos2dx开发/" class="archive-article-date">
-  	<time datetime="2019-07-15T12:31:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>cocos-2dx基础知识</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/cocos2dx//" class="article-tag-list-link color4">cocos2dx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/15/cocos2dx开发/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-XML解析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/07/XML解析/">XML解析</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/07/XML解析/" class="archive-article-date">
-  	<time datetime="2019-07-07T06:37:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>最近的工作任务是先学会解析XML，第一眼看到XML文件时很容易联想到HTML的代码风格。那到底什么是XML呢？</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/07/XML解析/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-我的第一篇博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/04/我的第一篇博客/">windows消息机制</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/04/我的第一篇博客/" class="archive-article-date">
-  	<time datetime="2019-07-04T13:33:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>windows消息机制</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/04/我的第一篇博客/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -866,8 +334,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
