@@ -6,15 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="www.cwpong.com">
-  <title>Archives: 2020 | 但偏偏</title>
+  <title>unity添加自定义面板按键 | 但偏偏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="但偏偏">
-<meta property="og:url" content="www.cwpong.com/archives/2020/page/2/index.html">
+  <meta name="description" content="为自己的脚本在面板添加一个点击可执行脚本某函数功能的按键">
+<meta property="og:type" content="article">
+<meta property="og:title" content="unity添加自定义面板按键">
+<meta property="og:url" content="www.cwpong.com/2020/06/10/unity添加自定义面板按键/index.html">
 <meta property="og:site_name" content="但偏偏">
+<meta property="og:description" content="为自己的脚本在面板添加一个点击可执行脚本某函数功能的按键">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://qbovpal6u.bkt.clouddn.com/%E8%87%AA%E5%AE%9A%E4%B9%89.jpg">
+<meta property="og:updated_time" content="2020-06-10T07:58:57.218Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="但偏偏">
+<meta name="twitter:title" content="unity添加自定义面板按键">
+<meta name="twitter:description" content="为自己的脚本在面板添加一个点击可执行脚本某函数功能的按键">
+<meta name="twitter:image" content="http://qbovpal6u.bkt.clouddn.com/%E8%87%AA%E5%AE%9A%E4%B9%89.jpg">
   
     <link rel="alternative" href="/atom.xml" title="但偏偏" type="application/atom+xml">
   
@@ -130,285 +136,172 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-unity添加自定义面板按键" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      unity添加自定义面板按键
+    </h1>
+  
+
+        
+        <a href="/2020/06/10/unity添加自定义面板按键/" class="archive-article-date">
+  	<time datetime="2020-06-10T07:58:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-10</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>为自己的脚本在面板添加一个点击可执行脚本某函数功能的按键</p>
+<a id="more"></a>
+<h3 id="unity自定义面板"><a href="#unity自定义面板" class="headerlink" title="unity自定义面板"></a>unity自定义面板</h3><p>当我们需要为一个组件添加自己自定义的编辑器内容时，需要用到这个特性：CustomEditor，语法如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[CustomEditor(typeof(Test), <span class="literal">true</span>), CanEditMultipleObjects]</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestEditor</span> :</span> Editor</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> override <span class="keyword">void</span> <span class="title">OnInspectorGUI</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Test window = target as Test;</span><br><span class="line">        <span class="keyword">if</span> (GUILayout.Button(<span class="string">"Save Bug"</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            window.doSomething1();</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="keyword">if</span> (GUILayout.Button(<span class="string">"Save Bug...."</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            window.doSomething2();</span><br><span class="line">        &#125;</span><br><span class="line">        base.DrawDefaultInspector();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://qbovpal6u.bkt.clouddn.com/%E8%87%AA%E5%AE%9A%E4%B9%89.jpg" alt="art"></p>
+<p>如图，在绑定了Test脚本的物体的编辑面板下就会出现按钮，点击按键可触发脚本相应的事件</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/21/c#单例模式/" class="archive-article-date">
-  	<time datetime="2020-05-21T02:31:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/21/c#单例模式/">c#单例模式</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/19/关于lua/" class="archive-article-date">
-  	<time datetime="2020-05-19T01:29:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/19/关于lua/">关于lua</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/18/c++拷贝构造函数为什么只能用引用作为参数/" class="archive-article-date">
-  	<time datetime="2020-05-18T08:56:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/18/c++拷贝构造函数为什么只能用引用作为参数/">c++构造函数为什么只能用引用作为参数</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/13/URG与PSH/" class="archive-article-date">
-  	<time datetime="2020-05-13T05:58:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/13/URG与PSH/">URG与PSH</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/网络编程//" class="article-tag-list-link color5">网络编程</a>
+        			<a href="/categories/unity//" class="article-tag-list-link color1">unity</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http:www.cwpong.com/2020/06/10/unity添加自定义面板按键/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/12/redis知识点/" class="archive-article-date">
-  	<time datetime="2020-05-12T06:37:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-12</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/06/10/unity编辑面板添加按键/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/12/redis知识点/">redis知识点</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数据库//" class="article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/02/13/网络传输数据包/" class="archive-article-date">
-  	<time datetime="2020-02-13T06:28:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-13</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/02/13/网络传输数据包/">网络传输数据包</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/01/13/i++和++i/" class="archive-article-date">
-  	<time datetime="2020-01-13T02:10:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/01/13/i++和++i/">i++和++i</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/01/12/4种类型转换/" class="archive-article-date">
-  	<time datetime="2020-01-12T11:21:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/01/12/4种类型转换/">4种类型转换</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2020/">&laquo; Prev</a><a class="page-number" href="/archives/2020/">1</a><span class="page-number current">2</span>
-    </nav>
   
 
 
@@ -432,8 +325,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

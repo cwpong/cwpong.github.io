@@ -132,6 +132,127 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-unity添加自定义面板按键" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/10/unity添加自定义面板按键/">unity添加自定义面板按键</a>
+    </h1>
+  
+
+        
+        <a href="/2020/06/10/unity添加自定义面板按键/" class="archive-article-date">
+  	<time datetime="2020-06-10T07:58:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>为自己的脚本在面板添加一个点击可执行脚本某函数功能的按键</p>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/unity//" class="article-tag-list-link color1">unity</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/06/10/unity添加自定义面板按键/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-unity编辑面板添加按键" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/06/10/unity编辑面板添加按键/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-shader-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -436,36 +557,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <a id="more"></a>
-<h3 id="委托"><a href="#委托" class="headerlink" title="委托"></a>委托</h3><p>c#中的委托类似于C++中函数的指针，是存有对某个方法的引用的一种引用变量，可在运行时会被改变<br>委托特别用于实现事件和回调方法，所有的委托都派生自System.Delegate类</p>
-<h4 id="声明委托"><a href="#声明委托" class="headerlink" title="声明委托"></a>声明委托</h4><p>委托声明决定了可由该委托引用的方法。委托可指向一个与其具有相同标签的方法</p>
-<blockquote>
-<p>public delegate int MyDElegate(string s);<br>上面的委托可被用于引用任何一个带有一个单一的string参数的方法，并返回一个int类型变量.</p>
-</blockquote>
-<h4 id="实例化委托"><a href="#实例化委托" class="headerlink" title="实例化委托"></a>实例化委托</h4><p>一旦声明了委托类型，委托对象必须使用new关键字来创建，且与一个特定的方法有关，当创建委托时，传递到new语句的参数就像方法调用一样书写，但是不带有参数</p>
-<blockquote>
-<p>public delegate void printString(string s);<br>printString ps1 = new printString(WriteToScreen);<br>printString ps2 = new printString(WriteToFile</p>
-</blockquote>
-<h4 id="多播委托"><a href="#多播委托" class="headerlink" title="多播委托"></a>多播委托</h4><p>委托对象可使用”+”运算符进行合并，一个合并委托调用它所合并的两个委托。只有相同类型的委托可被合并。“-”运算符可用于从合并的委托中移除组件委托。<br>使用委托的这个有用的特点，可以创建一个委托被调用时要调用的方法的调用列表。这被称为委托的多播，也叫组播</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">using System;</span><br><span class="line"></span><br><span class="line">delegate int NumberChanger(int);</span><br><span class="line">namespace DelegateApp</span><br><span class="line">&#123;</span><br><span class="line">	class TestDelegate</span><br><span class="line">	&#123;</span><br><span class="line">		static int num = 10;</span><br><span class="line">		public static int AddNum(int p)</span><br><span class="line">		&#123;</span><br><span class="line">			num += p;</span><br><span class="line">			retrun num;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		public static int MultNum(int q)</span><br><span class="line">		&#123;</span><br><span class="line">			num *= q;</span><br><span class="line">			return num;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		public static int GetNum()</span><br><span class="line">		&#123;</span><br><span class="line">			return num;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		static void Main(string[] args)</span><br><span class="line">		&#123;</span><br><span class="line">			//创建委托实例</span><br><span class="line">			NumerChanger nc;</span><br><span class="line">			NumerChanger nc1 = new NumberChanger(AddNum);</span><br><span class="line">			NumerChanger nc2 = new NumberChanger(MultNum);</span><br><span class="line">			nc = nc1;</span><br><span class="line">			nc += nc2;</span><br><span class="line">			//调用多播</span><br><span class="line">			nc(5);</span><br><span class="line">			//nc1 -&gt; 5 += 10 -&gt;15   nc2 -&gt; 15 *= 5 -&gt;75</span><br><span class="line">			Console.WriteLine(&quot;Value of Num : &#123;0&#125;&quot;, GetNum());	//75</span><br><span class="line">			Console.ReadKey();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h4 id="委托的用法"><a href="#委托的用法" class="headerlink" title="委托的用法"></a>委托的用法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">using System;</span><br><span class="line">using Syetem.IO;</span><br><span class="line"></span><br><span class="line">namespace DelegateApp</span><br><span class="line">&#123;</span><br><span class="line">	class PrintString</span><br><span class="line">	&#123;</span><br><span class="line">		static FileStream fs;</span><br><span class="line">		static StreamWriter sw;</span><br><span class="line">		//委托声明</span><br><span class="line">		public delegate void printString(string s);</span><br><span class="line">		</span><br><span class="line">		//该方法打印到控制台</span><br><span class="line">		public static void WriteToScreen(string str)</span><br><span class="line">		&#123;</span><br><span class="line">			Console.Writeline(&quot;the String is : &#123;0&#125;&quot;. str);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		//该方法打印到文件</span><br><span class="line">		public static void WriteToFile(string s)</span><br><span class="line">		&#123;</span><br><span class="line">			fs = new FIleStream(&quot;D:\\Message.txt&quot;, FileMode.Append, FileAccess.Write);</span><br><span class="line">			sw = new StreamWriter(fs);</span><br><span class="line">			sw.WriteLine(s);</span><br><span class="line">			sw.Flush();</span><br><span class="line">			sw.Close();</span><br><span class="line">			fs.Close();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		//该方法把委托作为参数，并使用它调用方法</span><br><span class="line">		public static void sendString(printString ps)</span><br><span class="line">		&#123;</span><br><span class="line">			ps(&quot;Hello World&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		static void Main(string[] args)</span><br><span class="line">		&#123;</span><br><span class="line">			printString ps1 = new printString(WriteToScreen);</span><br><span class="line">			printString ps2 = new printString(WriteToFile);</span><br><span class="line">			sendString(ps1);</span><br><span class="line">			sendString(ps2);</span><br><span class="line">			Console.ReadKey();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h3><p>事件基本上说是一个用户操作（按键、点击、鼠标移动等），应用程序需要在事件发生时响应事件</p>
-<h4 id="声明委托-1"><a href="#声明委托-1" class="headerlink" title="声明委托"></a>声明委托</h4><p>事件在类中声明且生成，且通过使用同一个类或其他类中的委托与事件处理程序关联。包含事件的类用于发布事件。这被称为发布器类。其他接受该事件的类被称为订阅器类。事件使用发布-订阅模型。<br>发布器是一个包含事件和委托定义的对象。事件和委托之间的联系也定义在这个对象中，发布器类的对象调用这个事件，并通知其他的对象。<br>订阅器是一个接受事件并提供事件处理程序的对象，在发布器类中的委托调用订阅器类中的方法；<br>在类的内部声明事件，首先必须声明该事件的委托类型</p>
-<blockquote>
-<p>public delegate void BoilerLogHandler(string status);</p>
-</blockquote>
-<p>然后，声明事件本身，使用event关键字</p>
-<blockquote>
-<p>public event BoilerLogHandler BoilerEventLog;<br>上面的代码定义了一个名为BoilerLogHandler的委托和一个名为BoilerEventLog的事件，该事件在生成的时候会调用委托</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">using System;</span><br><span class="line">namespace SimpleEvent</span><br><span class="line">&#123;</span><br><span class="line">	using System;</span><br><span class="line">	/********发布器类********/</span><br><span class="line">	public class EventTest</span><br><span class="line">	&#123;</span><br><span class="line">		private int value;</span><br><span class="line">		</span><br><span class="line">		public delegate void NumManipulationHandler();</span><br><span class="line">		</span><br><span class="line">		public event NumManipulationHandler ChangeNum;</span><br><span class="line">		</span><br><span class="line">		protected virtual void OnNumChanged()</span><br><span class="line">		&#123;</span><br><span class="line">			if(ChangeNum != null)</span><br><span class="line">			&#123;</span><br><span class="line">				ChangeNum();	//事件被触发</span><br><span class="line">			&#125;else</span><br><span class="line">			&#123;</span><br><span class="line">				Console.WriteLine(&quot;event not fire&quot;);</span><br><span class="line">				Console.ReadKey();	//回车继续</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		public EventTest()</span><br><span class="line">		&#123;</span><br><span class="line">			int n = 5;</span><br><span class="line">			SETvALUE(N);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		public void SetValue(int n)</span><br><span class="line">		&#123;</span><br><span class="line">			if(value != n)</span><br><span class="line">			&#123;</span><br><span class="line">				value = n;</span><br><span class="line">				OnNumChange();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	/********订阅器类********/</span><br><span class="line">	public class subscribEvent</span><br><span class="line">	&#123;</span><br><span class="line">		public void printf()</span><br><span class="line">		&#123;</span><br><span class="line">			Console.WriteLine(&quot;event fire&quot;);</span><br><span class="line">			Console.ReadKey();	/</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	/********触发********/</span><br><span class="line">	public class MainClass</span><br><span class="line">	&#123;</span><br><span class="line">		public static void Main()</span><br><span class="line">		&#123;</span><br><span class="line">			EventTest e = new EventTest();	//实例化对象，第一次没有触发事件</span><br><span class="line">			subscribEvent v = new subscribEvent();	//实例化对象</span><br><span class="line">			e.CHangeNum += new EventTest.NumManipulationHandler(v.print);	//注册</span><br><span class="line">			e.SetValue(7);</span><br><span class="line">			e.SetValue(11);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行结果</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">event <span class="keyword">not</span> fire</span><br><span class="line">event fire</span><br><span class="line">event fire</span><br></pre></td></tr></table></figure>
-
-
+        <p>c#中的委托和事件</p>
+        
       
 
       
@@ -689,132 +782,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/05/22/关于字节排序函数/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c#单例模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/21/c#单例模式/">c#单例模式</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/21/c#单例模式/" class="archive-article-date">
-  	<time datetime="2020-05-21T02:31:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在学习unity以及C#语言，通过C#的设计模式来熟悉一些语法</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/21/c#单例模式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-关于lua" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/19/关于lua/">关于lua</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/19/关于lua/" class="archive-article-date">
-  	<time datetime="2020-05-19T01:29:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文主要记录Lua中的面向对象,参考自lua菜鸟教程</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/19/关于lua/">展开全文 >></a>
         </p>
       
 
