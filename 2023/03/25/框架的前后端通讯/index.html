@@ -1,0 +1,658 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="protobuf1.什么是protobuf?  protobuf是Google公司提出的一种轻便高效的结构化数据存储格式，常用于结构化数据的序列化，具有语言无关、平台无关、可扩展性特性，常用于通讯协议、服务端数据交换场景 2.为什么要使用protobuf作为数据传输协议？protobuf优势： 1）类型安全 2）易用性好 3）序列化&#x2F;反序列性能好 4）兼容性好 5）不仅可以定义结构体，还可以定义r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="框架的前后端通讯">
+<meta property="og:url" content="http://example.com/2023/03/25/%E6%A1%86%E6%9E%B6%E7%9A%84%E5%89%8D%E5%90%8E%E7%AB%AF%E9%80%9A%E8%AE%AF/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="protobuf1.什么是protobuf?  protobuf是Google公司提出的一种轻便高效的结构化数据存储格式，常用于结构化数据的序列化，具有语言无关、平台无关、可扩展性特性，常用于通讯协议、服务端数据交换场景 2.为什么要使用protobuf作为数据传输协议？protobuf优势： 1）类型安全 2）易用性好 3）序列化&#x2F;反序列性能好 4）兼容性好 5）不仅可以定义结构体，还可以定义r">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/03/25/%E6%A1%86%E6%9E%B6%E7%9A%84%E5%89%8D%E5%90%8E%E7%AB%AF%E9%80%9A%E8%AE%AF/writeType.png">
+<meta property="article:published_time" content="2023-03-25T14:21:16.000Z">
+<meta property="article:modified_time" content="2023-03-25T15:48:36.491Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/03/25/%E6%A1%86%E6%9E%B6%E7%9A%84%E5%89%8D%E5%90%8E%E7%AB%AF%E9%80%9A%E8%AE%AF/writeType.png">
+  
+  
+  
+  <title>框架的前后端通讯 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="框架的前后端通讯"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-25 22:21" pubdate>
+          March 25, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">框架的前后端通讯</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="protobuf"><a href="#protobuf" class="headerlink" title="protobuf"></a>protobuf</h3><h5 id="1-什么是protobuf"><a href="#1-什么是protobuf" class="headerlink" title="1.什么是protobuf?"></a>1.什么是protobuf?</h5><p>  protobuf是Google公司提出的一种轻便高效的结构化数据存储格式，常用于结构化数据的序列化，具有语言无关、平台无关、可扩展性特性，常用于通讯协议、服务端数据交换场景</p>
+<h5 id="2-为什么要使用protobuf作为数据传输协议？"><a href="#2-为什么要使用protobuf作为数据传输协议？" class="headerlink" title="2.为什么要使用protobuf作为数据传输协议？"></a>2.为什么要使用protobuf作为数据传输协议？</h5><pre><code class="hljs">protobuf优势：
+1）类型安全
+2）易用性好
+3）序列化/反序列性能好
+4）兼容性好
+5）不仅可以定义结构体，还可以定义rpc服务接口
+
+劣势：
+1）可读性较差：没有schema的情况下，难以阅读和编辑。
+2）灵活性较差：无法动态修改schema。
+
+json: https://www.json.org/json-zh.html
+优势：可读性好：方便理解和编辑
+2）易用性好：使用简单灵活性好：支持动态修改schema
+
+劣势：序列化/反序列化性能差编码问题导致解析失败之类的
+</code></pre>
+<p>PS：在我做过的几款项目中，前面两款都是用protobuf消息协议，后面的项目使用的是Json，可能是protobuf用惯了，<br>在使用Json时感受到了其反序列化时的痛苦，而且有时候后端偷偷删掉了某个字段还会导致解析失败，简直是头疼。</p>
+<h4 id="3-Protobuf为什么这么快"><a href="#3-Protobuf为什么这么快" class="headerlink" title="3.Protobuf为什么这么快?"></a>3.Protobuf为什么这么快?</h4><p> 一个protobuf消息：<br> <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++">message Person<br>&#123;<br>    required int32 Id = <span class="hljs-number">1</span>;<br>    required string Name = <span class="hljs-number">2</span>;<br>    required string Hobby = <span class="hljs-number">3</span>;<br>    required string Introduction = <span class="hljs-number">4</span>;<br>&#125;<br></code></pre></td></tr></table></figure></p>
+<p>假如一样的消息通过Json来传，每个消息体需要把某个数据是属于哪个字段的信息一起下发(例如 id : 1), 而protobuf不需要将这个字段名一起带到消息中，那它是如何区分数据属于哪个字段呢:</p>
+<p>现在有个Person消息是这样的 id &#x3D; 1, Name &#x3D; Cwp, Hobby &#x3D; Play tennis, Introduction &#x3D; Hello word</p>
+<p>protobuf会将这个消息以这种形式写入</p>
+<h5 id="Tag1TagCwpTagPlay-tennisTagHello-Word"><a href="#Tag1TagCwpTagPlay-tennisTagHello-Word" class="headerlink" title="Tag1TagCwpTagPlay tennisTagHello Word"></a>Tag1TagCwpTagPlay tennisTagHello Word</h5><h5 id="Tag是如何来的？"><a href="#Tag是如何来的？" class="headerlink" title="Tag是如何来的？"></a>Tag是如何来的？</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">makeTag</span><span class="hljs-params">(<span class="hljs-keyword">final</span> <span class="hljs-type">int</span> fieldNumber, <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> wireType)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span>(fieldNumber &lt;&lt; <span class="hljs-number">3</span>) | wireType<br>&#125;<br></code></pre></td></tr></table></figure>
+<h6 id="fieldNumer：即消息定义时-“-x3D-”-号右边的数字，这也就是为什么定义完一个消息后就不允许再修改这个值的原因-修改后Tag也会变，从而导致解析失败"><a href="#fieldNumer：即消息定义时-“-x3D-”-号右边的数字，这也就是为什么定义完一个消息后就不允许再修改这个值的原因-修改后Tag也会变，从而导致解析失败" class="headerlink" title="fieldNumer：即消息定义时 “&#x3D;” 号右边的数字，这也就是为什么定义完一个消息后就不允许再修改这个值的原因(修改后Tag也会变，从而导致解析失败)"></a>fieldNumer：即消息定义时 “&#x3D;” 号右边的数字，这也就是为什么定义完一个消息后就不允许再修改这个值的原因(修改后Tag也会变，从而导致解析失败)</h6><h6 id="wireType：字段类型，即int32-string等，protobuf支持的类型如下图，-0-5转为二进制最高用3位就能表示全，故需要将fieldNumber左移三位，后三位用wireType的二进制补全，这样解析的时候只需要取后三位就能知道类型"><a href="#wireType：字段类型，即int32-string等，protobuf支持的类型如下图，-0-5转为二进制最高用3位就能表示全，故需要将fieldNumber左移三位，后三位用wireType的二进制补全，这样解析的时候只需要取后三位就能知道类型" class="headerlink" title="wireType：字段类型，即int32, string等，protobuf支持的类型如下图， 0-5转为二进制最高用3位就能表示全，故需要将fieldNumber左移三位，后三位用wireType的二进制补全，这样解析的时候只需要取后三位就能知道类型"></a>wireType：字段类型，即int32, string等，protobuf支持的类型如下图， 0-5转为二进制最高用3位就能表示全，故需要将fieldNumber左移三位，后三位用wireType的二进制补全，这样解析的时候只需要取后三位就能知道类型</h6><p> <img src="/2023/03/25/%E6%A1%86%E6%9E%B6%E7%9A%84%E5%89%8D%E5%90%8E%E7%AB%AF%E9%80%9A%E8%AE%AF/writeType.png" srcset="/img/loading.gif" lazyload></p>
+<h5 id="Tag分隔符为一个字节，如果传输的内容中出现相同的字节，那么不会导致解析错误吗？"><a href="#Tag分隔符为一个字节，如果传输的内容中出现相同的字节，那么不会导致解析错误吗？" class="headerlink" title="Tag分隔符为一个字节，如果传输的内容中出现相同的字节，那么不会导致解析错误吗？"></a>Tag分隔符为一个字节，如果传输的内容中出现相同的字节，那么不会导致解析错误吗？</h5><p>实际上是不会的，protobuf避免了这种情况：</p>
+<pre><code class="hljs">  例如有个数据为267， 用二进制表示是 
+  
+  00000000 00000000 00000001 00001011 (256 + 8 + 2 + 1)
+  其中前两个字节都是0，属于无效字节，protobuf会将其舍弃，上述字节变成以下形式
+  
+  10001011 00000010 ，每个字节的后面七位才是属于数据本身， 第一个字节(10001011)中后七位取的是原数据二进制的低
+  七位（大小端?，这里没有进一步了解，先记录下来）, 取完后发现再往前还有有效数据（往前还有非0的数据），所以第8位置
+  为1, 1代表下一个字节（00000010）还是属于该数据, 第二个字节(00000010)是从原二进制右移七位后截取低7位截取的，
+  取完后此时再往前的数据都是0，所以第8位置0，这个时候代表下一个字节的数据已经不是该数据（267）了。
+  
+  另外,protobuf是以Tag-Length-Value形式编码的（Tag为分隔符，Length为数据长度，Value则是数据），那么如果一开始
+  是要传输一个数字，取到第一个tag的时候，解析出它的fieldNumber和writeType, 如果高位为1则表示下一个字节还是该数字，
+  如果为0则表示下一个字节是Tag. 而如果一开始传输的是一个字符串，拿到Tag后，就知道下一个数据是一个字符串，所以下一
+  个字节开始作为Length解析，遇到0的话就知道value的长度了（字节解析后的值），然后根据这个长度去取出字符串，取完后
+  下一个字节就是Tag了，以此类推, protobuf永远知道哪一个字节是Tag
+  
+  
+</code></pre>
+<p> 以上内容参考自：<br> B站 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Qh411Q7yY/?spm_id_from=333.337.search-card.all.click&vd_source=b5e57c1b7d51c4eef6257043ceabc862">Protobuf为什么这么快？</a><br> 知乎<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/559950962">Protobuf编码原理</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>框架的前后端通讯</div>
+      <div>http://example.com/2023/03/25/框架的前后端通讯/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 25, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/25/%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD/" title="登录功能">
+                        <span class="hidden-mobile">登录功能</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
