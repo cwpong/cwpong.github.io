@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2023/03/25/%E6%A1%86%E6%9E%B6%E7%9A%84%E5%89%8D%E5%90%8E%E7%AB%AF%E9%80%9A%E8%AE%AF/writeType.png">
 <meta property="article:published_time" content="2023-03-25T14:21:16.000Z">
-<meta property="article:modified_time" content="2023-03-26T06:11:30.337Z">
+<meta property="article:modified_time" content="2023-03-26T07:07:39.903Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/2023/03/25/%E6%A1%86%E6%9E%B6%E7%9A%84%E5%89%8D%E5%90%8E%E7%AB%AF%E9%80%9A%E8%AE%AF/writeType.png">
@@ -221,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.9k words
+          4k words
         
       </span>
     
@@ -232,7 +232,7 @@
         
         
         
-          33 mins
+          34 mins
         
       </span>
     
@@ -328,13 +328,16 @@ json: https://www.json.org/json-zh.html
 <p>ET中前后端通讯的消息分为两类</p>
 <p>1） 客户端可以直接发送给服务端的消息<br>2） 客户端消息必须通过网管服转发到服务端，此类消息在框架中被称为ActorLocation消息</p>
 <h4 id="框架中如何使用"><a href="#框架中如何使用" class="headerlink" title="框架中如何使用"></a>框架中如何使用</h4><p>客户端发送消息的伪代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++">Seeion session = zoneScene.<span class="hljs-built_in">GetComponent</span>&lt;NetKcpComponent&gt;().<span class="hljs-built_in">Create</span>(NetWorkHelper.<span class="hljs-built_in">ToIPEndPoint</span>(address));<br><br><span class="hljs-comment">// 使用后Call是需要后端回复的请求</span><br>R2C_Login r2c_Login = (R2C_Login) await session,<span class="hljs-built_in">Call</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">R2c_Login</span>() &#123;...&#125;);<br><br><span class="hljs-comment">// 回复的结果 r2c_Login.xxx</span><br><br><span class="hljs-comment">// 使用Send是不需要后端回复的消息</span><br>session.<span class="hljs-built_in">Send</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">C2R_Test</span>());l<br> <br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++">Seeion session = zoneScene.<span class="hljs-built_in">GetComponent</span>&lt;NetKcpComponent&gt;().<span class="hljs-built_in">Create</span>(NetWorkHelper.<span class="hljs-built_in">ToIPEndPoint</span>(address));<br><br><span class="hljs-comment">// 使用后Call是需要后端回复的请求</span><br>R2C_Login r2c_Login = (R2C_Login) await session.<span class="hljs-built_in">Call</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">R2c_Login</span>() &#123;...&#125;);<br><br><span class="hljs-comment">// 回复的结果 r2c_Login.xxx</span><br><br><span class="hljs-comment">// 使用Send是不需要后端回复的消息</span><br>session.<span class="hljs-built_in">Send</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">C2R_Test</span>());<br> <br></code></pre></td></tr></table></figure>
 
 <p>后端处理消息的伪代码如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 这个标签表示这个函数使用来处理消息请求的</span><br>[MessageHandler]<br> <br> <span class="hljs-comment">// AMRpcHandle说明是需要回复的消息</span><br> <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">C2R_LoginHandler</span> : AMRpcHandle&lt;C2R_Login, R2C_Login&gt; <span class="hljs-comment">// 消息请求以及回复的类型</span><br> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> async ETTask  <span class="hljs-title">Run</span><span class="hljs-params">(Session session, C2R_Login request, R2C_Login response, Action reply)</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-comment">// request 请求的内容</span><br>        <span class="hljs-comment">// response要回复的内容</span><br>        <span class="hljs-comment">// 处理完毕</span><br>        <span class="hljs-built_in">reply</span>();<br>        await ETTask.CompletedTask;<br>    &#125;<br> &#125;<br> <br> [MessageHandler]<br> <span class="hljs-comment">// AMHandler是不需要回复的</span><br> <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">C2R_Test</span> : AMHandler&lt;C2RTest&gt;<br> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> async ETTask <span class="hljs-title">Run</span><span class="hljs-params">(Session session, C2R_Test message)</span></span><br><span class="hljs-function">    </span>&#123;<br>    <br>        <span class="hljs-comment">// 后端也可以直接下推消息</span><br>        session.<span class="hljs-built_in">Send</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">R2C_Test</span>());<br>        await ETTask.CompletedTask;<br>    &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
 
 <p>客户端处理后端主动推送消息的伪代码如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><br>[MessageHandler]<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">R2C_Test</span> : AMHandler&lt;R2C_Test&gt;<br> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> async ETTask <span class="hljs-title">Run</span><span class="hljs-params">(Session session, R2C_Test message)</span></span><br><span class="hljs-function">    </span>&#123;<br>    <br>        ...<br>    &#125;<br> &#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>注：上面的C2R_Login是IActorReueqst类型，在ET中还有一种IActorLocationRequest类型，这两种类型的区分在这里先不记录，在<br>后面开发有遇到的时候再研究其区分。</p>
+
                 
               </div>
             
