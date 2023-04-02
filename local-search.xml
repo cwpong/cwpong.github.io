@@ -4,11 +4,37 @@
   
   
   <entry>
+    <title>登陆流程(账号登陆)</title>
+    <link href="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%B4%A6%E5%8F%B7%E7%99%BB%E9%99%86/"/>
+    <url>/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%B4%A6%E5%8F%B7%E7%99%BB%E9%99%86/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>账号登陆流程之（获取服务器列表）</title>
     <link href="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B(%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8)/"/>
     <url>/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B(%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8)/</url>
     
     <content type="html"><![CDATA[<p>本周完成了一个较完整的登陆流程（获取服务器，创建\删除角色，选择角色并进入游戏），本文记录一下获取服务器的流程</p><p>这部分的实现是这样的：</p><p>1.在客户端添加一个组件ServerInfosComponent， 组件用一个列表来记录后端下发的服务器信息，图中有两个标签</p><p>[ChildType(typeof(ServerInfo))]是用来约束这个组件能添加的子实体类型</p><p>[ComponentOf(typeof(Scene))]是用说明这个组件能被哪个组件添加<br><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B(%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8)/img1.png"></p><p>2.后端添加一个组件ServerInfosManagerComponent， 也用一个列表来记录服务器信息，服务器信息的填充如下图<br><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B(%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8)/img2.png"></p><p>1）先从数据库中查询是否有服务器数据，DBManagerComponent是一个单例组件，用来完成对数据库的增删改查操作</p><p>2）如果数据库中没有数据，则从表格配置中生成数据。框架中的表格数据放在 工程目录\Excel下，编辑好表格后运行目录下的win_startExcelExport.bat文件，即可生成可读取表格数据的代码（例如下图中ServerInfoConfigCategory），之后将配置好的数据序列化成前端需要的数据，随后发送给前端并保存到数据库</p><p>图中标签[FriendClass(typeof(ServerInfo))]表示这个组件能访问标签指定的成员</p><p><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B(%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8)/img5.png"></p><p>如图，在后端添加一个管理ServerInfosManagerComponent的System，并添加ServerInfosManagerComponentDestroySystem（会在ServerInfosManagerComponent销毁的时候触发Destroy函数），ServerInfosManagerComponentLoadSystem（会在添加ServerInfosManagerComponent的时候触发Load函数），这是ET框架中关于组件的生命周期的特性，具体实现这里不做记录。只要知道在这个系统中Destroy用来回收创建的服务器信息entity，Load用来添加组件时从数据库获取数据并添加到缓存中即可</p><p>3.前端通过调用协议获取后端数据，并显示在界面中</p><p>1）需要获取后端响应的消息通过zoneScene.GetComponent<SessionComponent>()Session.Call()去请求</p><p>2）框架中的UI使用的是EUI框架，这边就先不详细解释使用的细节了<br><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B(%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8)/img3.png"></p><p>之后，选中其中一个区服，点击确认，就可以开始创建角色了，<br><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B(%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8)/img4.png"></p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>账号登陆流程之（获取服务器列表）</title>
+    <link href="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8/"/>
+    <url>/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8/</url>
+    
+    <content type="html"><![CDATA[<p>本周完成了一个较完整的登陆流程（获取服务器，创建\删除角色，选择角色并进入游戏），本文记录一下获取服务器的流程</p><p>这部分的实现是这样的：</p><p>1.在客户端添加一个组件ServerInfosComponent， 组件用一个列表来记录后端下发的服务器信息，图中有两个标签</p><p>[ChildType(typeof(ServerInfo))]是用来约束这个组件能添加的子实体类型</p><p>[ComponentOf(typeof(Scene))]是用说明这个组件能被哪个组件添加<br><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8/img1.png"></p><p>2.后端添加一个组件ServerInfosManagerComponent， 也用一个列表来记录服务器信息，服务器信息的填充如下图<br><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8/img2.png"></p><p>1）先从数据库中查询是否有服务器数据，DBManagerComponent是一个单例组件，用来完成对数据库的增删改查操作</p><p>2）如果数据库中没有数据，则从表格配置中生成数据。框架中的表格数据放在 工程目录\Excel下，编辑好表格后运行目录下的win_startExcelExport.bat文件，即可生成可读取表格数据的代码（例如下图中ServerInfoConfigCategory），之后将配置好的数据序列化成前端需要的数据，随后发送给前端并保存到数据库</p><p>图中标签[FriendClass(typeof(ServerInfo))]表示这个组件能访问标签指定的成员</p><p><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8/img5.png"></p><p>如图，在后端添加一个管理ServerInfosManagerComponent的System，并添加ServerInfosManagerComponentDestroySystem（会在ServerInfosManagerComponent销毁的时候触发Destroy函数），ServerInfosManagerComponentLoadSystem（会在添加ServerInfosManagerComponent的时候触发Load函数），这是ET框架中关于组件的生命周期的特性，具体实现这里不做记录。只要知道在这个系统中Destroy用来回收创建的服务器信息entity，Load用来添加组件时从数据库获取数据并添加到缓存中即可</p><p>3.前端通过调用协议获取后端数据，并显示在界面中</p><p>1）需要获取后端响应的消息通过zoneScene.GetComponent<SessionComponent>()Session.Call()去请求</p><p>2）框架中的UI使用的是EUI框架，这边就先不详细解释使用的细节了<br><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8/img3.png"></p><p>之后，选中其中一个区服，点击确认，就可以开始创建角色了，<br><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8/img4.png"></p>]]></content>
     
     
     
