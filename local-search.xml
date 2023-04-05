@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>Spine的使用</title>
+    <link href="/2023/04/05/Spine%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <url>/2023/04/05/Spine%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    
+    <content type="html"><![CDATA[<p>今天在给项目准备资源的时候，导入Spine出现了问题<br><img src="/2023/04/05/Spine%E7%9A%84%E4%BD%BF%E7%94%A8/img1.png"></p><p>从警告上来说时材质丢失了，查看生成的material文件，发现上面的纹理是空的，但是spine需要的图片是在的，点开图片发现导入的时候默认的 TextureType是默认类型<br><img src="/2023/04/05/Spine%E7%9A%84%E4%BD%BF%E7%94%A8/img2.png"></p><p>将其类型改成sprite<br><img src="/2023/04/05/Spine%E7%9A%84%E4%BD%BF%E7%94%A8/img3.png"></p><p>重新设置材质的纹理<br><img src="/2023/04/05/Spine%E7%9A%84%E4%BD%BF%E7%94%A8/img4.png"></p><p>重新设置atlas文件的材质，至此，警告已经消除了<br><img src="/2023/04/05/Spine%E7%9A%84%E4%BD%BF%E7%94%A8/img5.png"></p><p>问题虽然解决了，但是如果之后每次导入spine时都要执行一次这个操作，这显然耗时又废力，好在Unity 提供了 AssetPostProcessor 这个接口，它允许开发者挂接到导入管线并在导入资源的前后运行脚本。可用于项目中强制执行某些最低标准。每次导入资源或者资源的导入设置发生更改时将回调此类。<br>参考链接<a href="https://www.cnblogs.com/wildmelon/p/16144087.html">AssetPostprocessor</a><br>在工程\Unity\Asset\Editor目录下新建一个类ImageImporter,这个类的作用是当导入资源是纹理的时候，将其纹理类型改成Sprite</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ImageImporter</span>: AssetPostprocessor<br>&#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">OnPreprocessTexture</span><span class="hljs-params">()</span></span><br><span class="hljs-function">    </span>&#123;<br>        TextureImporter textureImporter = (TextureImporter)assetImporter;<br>        textureImporter.textureType = TextureImporterType.Sprite;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure><p>修改后拖进一个新的spine文件，此时能正常生成材质</p><p>这个接口还提供了很多功能，后续如果有类型的问题的时候再继续研究和使用</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>登陆流程(账号登陆)</title>
     <link href="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%B4%A6%E5%8F%B7%E7%99%BB%E9%99%86/"/>
     <url>/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%B4%A6%E5%8F%B7%E7%99%BB%E9%99%86/</url>
