@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>接入YooAsset</title>
+    <link href="/2023/04/06/%E6%8E%A5%E5%85%A5YooAsset/"/>
+    <url>/2023/04/06/%E6%8E%A5%E5%85%A5YooAsset/</url>
+    
+    <content type="html"><![CDATA[<p>ps: 接入的时候出现了个报错 怀疑是Yooasets访问不到我在本地创建的FTP服务器（需要账号密码），这篇文章只能先占个位搁置了</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Spine的使用</title>
     <link href="/2023/04/05/Spine%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
     <url>/2023/04/05/Spine%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
