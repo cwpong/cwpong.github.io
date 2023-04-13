@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>接入HybridCLR</title>
+    <link href="/2023/04/12/%E6%8E%A5%E5%85%A5HybridCLR/"/>
+    <url>/2023/04/12/%E6%8E%A5%E5%85%A5HybridCLR/</url>
+    
+    <content type="html"><![CDATA[<p>在碰壁了两天后，总算在项目中成功接入了HybridCLR，先占个位置，后面再整理接入过程<br><img src="/2023/04/12/%E6%8E%A5%E5%85%A5HybridCLR/01.png"></p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>接入YooAsset</title>
     <link href="/2023/04/06/%E6%8E%A5%E5%85%A5YooAsset/"/>
     <url>/2023/04/06/%E6%8E%A5%E5%85%A5YooAsset/</url>
@@ -34,7 +47,7 @@
     <link href="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%B4%A6%E5%8F%B7%E7%99%BB%E9%99%86/"/>
     <url>/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%B4%A6%E5%8F%B7%E7%99%BB%E9%99%86/</url>
     
-    <content type="html"><![CDATA[<p>上一篇文章写了获取服务器信息的流程，漏掉了真正的第一步（账号登陆流程），这边补充一下</p><h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><p>1）创建一个会话Seesion用于跟后端通讯</p><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c#">Session accountSession = zoneScene.GetComponent&lt;NetKcpComponent&gt;().Create(NetworkHelper.ToIPEndPoint(address));<br></code></pre></td></tr></table></figure><p>NetKcpComponent：用于前后端通讯的组件</p><p>2）在OuterMessage.proto中定义登陆账号的前后端协议C2A_LoginAccount以及A2C_LoginAccount</p><p>3）通过步骤(1)创建的Session调用Call方法，将输入的账号密码填入 C2A_LoginAccount 中并发起请求，如果请求成功，则在zoneScene中添加SessionComponent组件并记录下步骤(1)创建的会话session以供后续使用（失败的话调用accountSession?.Dispose()避免会话资源的浪费）.</p><p>4）在该会话中添加心跳检测组件PingComponent，这个组件会跟后端定期联络，告诉后端这个会话还有效，避免客户端出现闪退等异常情况没有通知后端关闭会话，导致后端一直持有这个已经无效的会话的情况。</p><p>5）客户端新增组件AccountInfoComponent用来保存从后端获取的Token以及当前登陆的账号ID</p><h3 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h3>]]></content>
+    <content type="html"><![CDATA[<p>上一篇文章写了获取服务器信息的流程，漏掉了真正的第一步（账号登陆流程），这边补充一下</p><h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><p>1）创建一个会话Seesion用于跟后端通讯</p><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c#">Session accountSession = zoneScene.GetComponent&lt;NetKcpComponent&gt;().Create(NetworkHelper.ToIPEndPoint(address));<br></code></pre></td></tr></table></figure><p>NetKcpComponent：用于前后端通讯的组件</p><p>2）在OuterMessage.proto中定义登陆账号的前后端协议C2A_LoginAccount以及A2C_LoginAccount</p><p>3）通过步骤(1)创建的Session调用Call方法，将输入的账号密码填入 C2A_LoginAccount 中并发起请求，如果请求成功，则在zoneScene中添加SessionComponent组件并记录下步骤(1)创建的会话session以供后续使用（失败的话调用accountSession?.Dispose()避免会话资源的浪费）.</p><p>4）在该会话中添加心跳检测组件PingComponent，这个组件会跟后端定期联络，告诉后端这个会话还有效，避免客户端出现闪退等异常情况没有通知后端关闭会话，导致后端一直持有这个已经无效的会话的情况。</p><p>5）客户端新增组件AccountInfoComponent用来保存从后端获取的Token以及当前登陆的账号ID</p><h3 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h3><p>处理客户端发来的C2A_LoginAccount请求<br><img src="/2023/04/02/%E7%99%BB%E9%99%86%E6%B5%81%E7%A8%8B-%E8%B4%A6%E5%8F%B7%E7%99%BB%E9%99%86/1.png"></p><p>登陆流程如上图，一开始在添加AccountCheckOutTimeComponent这一部分有疑问，因为在设定的时间后会被断开连接，那不就是会被踢下线吗，到后面才知道这个连接到账号服只是第一步，后面客户端会以其他方式跟后端建立连接<br>至此账号登陆账号服与注册流程已经完成</p>]]></content>
     
     
     
